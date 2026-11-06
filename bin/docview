@@ -1,0 +1,113 @@
+#!/usr/bin/env -S python3 -P
+"""docview FILE — print a Word/LibreOffice document as markdown (pipe to `mdview -` to render).
+
+.docx: parsed directly (headings, bold, lists, tables) — fast, no LibreOffice start-up.
+.doc:  antiword.   .odt/.rtf/other: LibreOffice headless --cat (slower, plain text).
+"""
+import os
+import re
+import shutil
+import subprocess
+import sys
+import zipfile
+from xml.etree import ElementTree as ET
+
+W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+
+
+def runs_text(p):
+    out = []
+    for r in p.iter(W + "r"):
+        bold = r.find(f"{W}rPr/{W}b") is not None and r.find(f"{W}rPr/{W}b").get(W + "val", "1") not in ("0", "false")
+        t = ""
+        for node in r:
+            if node.tag == W + "t":
+                t += node.text or ""
+            elif node.tag == W + "tab":
+                t += "\t"
+            elif node.tag in (W + "br", W + "cr"):
+                t += "  \n"
+        if bold and t.strip():
+            lead, core, trail = re.match(r"(\s*)(.*?)(\s*)$", t, re.S).groups()
+            t = f"{lead}**{core}**{trail}"
+        out.append(t)
+    return re.sub(r"\*\*\*\*", "", "".join(out)).strip()
+
+
+def para(p):
+    text = runs_text(p)
+    if not text:
+        return ""
+    ppr = p.find(W + "pPr")
+    style, listed = "", False
+    if ppr is not None:
+        s = ppr.find(W + "pStyle")
+        style = (s.get(W + "val", "") if s is not None else "").lower()
+        listed = ppr.find(W + "numPr") is not None
+    if style == "title":
+        return "# " + text.strip("*")
+    m = re.match(r"heading\s*(\d)", style)
+    if m:
+        return "#" * min(int(m.group(1)) + (0 if style != "title" else 0), 6) + " " + text.strip("*")
+    if listed or "list" in style:
+        return "- " + text
+    return text
+
+
+def table(tbl):
+    rows = []
+    for tr in tbl.iter(W + "tr"):
+        cells = [" ".join(runs_text(p) for p in tc.iter(W + "p")).replace("|", "\\|") for tc in tr.findall(W + "tc")]
+        rows.append("| " + " | ".join(cells) + " |")
+    if rows:
+        ncols = rows[0].count(" | ") + 1
+        rows.insert(1, "|" + "---|" * ncols)
+    return "\n".join(rows)
+
+
+def docx(path):
+    with zipfile.ZipFile(path) as z:
+        body = ET.fromstring(z.read("word/document.xml")).find(W + "body")
+    blocks, prev_list = [], False
+    for child in body:
+        if child.tag == W + "p":
+            b = para(child)
+            if not b:
+                prev_list = False
+                continue
+            is_list = b.startswith("- ")
+            if is_list and prev_list:
+                blocks[-1] += "\n" + b  # keep list items together
+            else:
+                blocks.append(b)
+            prev_list = is_list
+        elif child.tag == W + "tbl":
+            blocks.append(table(child))
+            prev_list = False
+    return "\n\n".join(blocks) + "\n"
+
+
+def main():
+    if len(sys.argv) != 2:
+        print(__doc__.strip(), file=sys.stderr)
+        return 2
+    path = sys.argv[1]
+    if not os.path.isfile(path):
+        print(f"docview: no such file: {path}", file=sys.stderr)
+        return 1
+    ext = os.path.splitext(path)[1].lower()
+    if ext == ".docx":
+        sys.stdout.write(docx(path))
+    elif ext == ".doc" and shutil.which("antiword"):
+        os.execvp("antiword", ["antiword", path])
+    else:
+        r = subprocess.run(["soffice", "--headless", "--cat", path], capture_output=True, text=True)
+        sys.stdout.write(r.stdout)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except BrokenPipeError:
+        sys.exit(0)

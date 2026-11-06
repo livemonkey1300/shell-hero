@@ -1,0 +1,208 @@
+#!/bin/sh
+# pomo — the timer engine. Owns state, notifications and the log.
+#
+# Claude drives this; it does not reimplement it. A 25-minute timer cannot live
+# inside a Claude turn, so the timer is a real background job here and Claude
+# handles the judgement parts: picking ONE task, capturing what actually
+# happened, deciding whether to continue.
+#
+# Usage:
+#   pomo start "task"  [preset]   begin an interval
+#   pomo status                   where am I, how long left
+#   pomo done ["what happened"]   complete the interval, log it
+#   pomo break [long]             start a break
+#   pomo abort ["why"]            interrupted — logged as abandoned, not done
+#   pomo log [today|all]          what actually landed
+#   pomo preset                   list presets
+set -u
+
+STATE="$HOME/.claude/pomo.state"
+LOG="$HOME/.claude/pomo.log"
+touch "$LOG" 2>/dev/null
+
+# ── Presets ────────────────────────────────────────────────────────────────
+# 25/5 is the canonical Pomodoro. The others exist because interval length
+# should match the RELOAD COST of the work:
+#   deep    — architecture, holding a system model. A 25m block spends
+#             10-15m of itself rebuilding context, so the work:reload ratio
+#             is poor. 50m fixes that.
+#   classic — the standard. Good for bounded, well-defined tasks.
+#   short   — when starting is the hard part. Lower the bar until it's
+#             smaller than the resistance.
+#   grind   — long-form review or writing that is already loaded.
+preset_vals() {
+  case "${1:-classic}" in
+    deep)    echo "50 10 3 30" ;;
+    classic) echo "25 5 4 20" ;;
+    short)   echo "15 5 4 15" ;;
+    grind)   echo "90 20 2 45" ;;
+    *)       echo "" ;;
+  esac
+}
+
+notify() {
+  command -v notify-send >/dev/null 2>&1 && \
+    notify-send -u "${3:-normal}" "$1" "$2" 2>/dev/null
+  command -v paplay >/dev/null 2>&1 && \
+    paplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null &
+  :
+}
+
+# Shell-quote a value for the state file. Without this, `task=deploy the thing`
+# sources as task=deploy plus an attempted execution of `the thing` — which is
+# exactly what the first smoke test hit.
+q() { printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"; }
+
+cancel_timer() {
+  [ -f "$STATE" ] || return 0
+  job=$(sed -n "s/^job=//p" "$STATE" 2>/dev/null | tr -d "'")
+  [ -n "$job" ] || return 0
+  # ★ systemd-run --on-active creates BOTH a .service and a .timer. Stopping
+  #   only the service leaves the timer armed, so an aborted interval still
+  #   fires its notification 25 minutes later — which trains you to ignore the
+  #   notification, and that is the one thing this must not do.
+  case "$job" in
+    *.service)
+      systemctl --user stop "${job%.service}.timer" 2>/dev/null
+      systemctl --user stop "$job" 2>/dev/null
+      ;;
+    *) kill "$job" 2>/dev/null ;;
+  esac
+  :
+}
+
+schedule() {
+  # $1 = seconds, $2 = title, $3 = body, $4 = urgency
+  if command -v systemd-run >/dev/null 2>&1; then
+    unit="pomo-$(date +%s)"
+    systemd-run --user --quiet --on-active="$1" --unit="$unit" \
+      notify-send -u "$4" "$2" "$3" 2>/dev/null && { echo "$unit.service"; return; }
+  fi
+  ( sleep "$1"; notify-send -u "$4" "$2" "$3" 2>/dev/null ) &
+  echo "$!"
+}
+
+cmd_start() {
+  task="${1:?pomo start \"task\" [preset]}"
+  p="${2:-classic}"
+  v=$(preset_vals "$p")
+  [ -z "$v" ] && { echo "unknown preset: $p (deep|classic|short|grind)" >&2; exit 1; }
+  work=$(echo "$v" | cut -d' ' -f1)
+  brk=$(echo "$v" | cut -d' ' -f2)
+  cycle=$(echo "$v" | cut -d' ' -f3)
+
+  cancel_timer
+  # Which interval of the cycle is this? Counted from today's completed log.
+  n=$(grep -c "^$(date +%F).*|done|" "$LOG" 2>/dev/null); n=${n:-0}
+  n=$((n % cycle + 1))
+
+  job=$(schedule $((work*60)) "🍅 ${work}m done — $task" "Break ${brk}m. Stand up." critical)
+
+  {
+    echo "task=$(q "$task")"
+    echo "preset=$(q "$p")"
+    echo "work=$work"
+    echo "break=$brk"
+    echo "cycle=$cycle"
+    echo "n=$n"
+    echo "start=$(date +%s)"
+    echo "job=$(q "$job")"
+    echo "phase=work"
+  } > "$STATE"
+
+  printf '🍅 %s  ·  %sm  ·  interval %s/%s\n' "$task" "$work" "$n" "$cycle"
+  printf '   ends %s\n' "$(date -d "+${work} minutes" +%H:%M 2>/dev/null || date -v+${work}M +%H:%M)"
+}
+
+cmd_status() {
+  [ -f "$STATE" ] || { echo "no pomodoro running"; exit 0; }
+  task=""; start=$(date +%s); work=25; break=5; n=1; cycle=4; preset=classic; phase=work
+  . "$STATE" 2>/dev/null
+  now=$(date +%s); el=$(( (now - start) / 60 ))
+  if [ "${phase:-work}" = "break" ]; then dur=$break; label="break"; else dur=$work; label="🍅"; fi
+  left=$(( dur - el ))
+  if [ "$left" -le 0 ]; then
+    printf '%s %s — OVERRUN by %sm. %s\n' "$label" "${task:-}" "$(( -left ))" \
+      "$([ "${phase:-work}" = work ] && echo 'Stop and log it: pomo done' || echo 'Break over: pomo start')"
+  else
+    printf '%s %s — %sm left (interval %s/%s, %s)\n' "$label" "${task:-}" "$left" "${n:-1}" "${cycle:-4}" "${preset:-classic}"
+  fi
+}
+
+cmd_done() {
+  [ -f "$STATE" ] || { echo "nothing running" >&2; exit 1; }
+  task=""; start=$(date +%s); cycle=4
+  . "$STATE" 2>/dev/null
+  cancel_timer
+  el=$(( ($(date +%s) - start) / 60 ))
+  printf '%s|%s|done|%sm|%s|%s\n' "$(date +%F)" "$(date +%H:%M)" "$el" "$task" "${1:-}" >> "$LOG"
+  rm -f "$STATE"
+
+  n_today=$(grep -c "^$(date +%F).*|done|" "$LOG" 2>/dev/null); n_today=${n_today:-0}
+  printf '✓ logged (%sm actual) — %s today\n' "$el" "$n_today"
+  if [ "$(( n_today % cycle ))" -eq 0 ]; then
+    printf '   ★ %s intervals done. LONG break — that is the one that matters.\n' "$cycle"
+    printf '     pomo break long\n'
+  else
+    printf '     pomo break\n'
+  fi
+}
+
+cmd_break() {
+  long="${1:-}"
+  break=5; cycle=4; preset=classic; n=1
+  [ -f "$STATE" ] && . "$STATE" 2>/dev/null
+  if [ "$long" = "long" ]; then
+    v=$(preset_vals "${preset:-classic}"); d=$(echo "$v" | cut -d' ' -f4)
+  else
+    d="${break:-5}"
+  fi
+  cancel_timer
+  job=$(schedule $((d*60)) "Break over — ${d}m" "Next task, or stop for the day." normal)
+  { echo "phase=break"; echo "break=$d"; echo "work=$d"; echo "start=$(date +%s)";
+    echo "job=$(q "$job")"; echo "task=break"; echo "preset=$(q "${preset:-classic}")";
+    echo "cycle=${cycle:-4}"; echo "n=${n:-1}"; } > "$STATE"
+  printf '☕ %sm break — ends %s\n' "$d" "$(date -d "+${d} minutes" +%H:%M 2>/dev/null || date -v+${d}M +%H:%M)"
+  printf '   Away from the screen. The break is the boundary, not a pause.\n'
+}
+
+cmd_abort() {
+  [ -f "$STATE" ] || { echo "nothing running" >&2; exit 1; }
+  task=""; start=$(date +%s)
+  . "$STATE" 2>/dev/null
+  cancel_timer
+  el=$(( ($(date +%s) - start) / 60 ))
+  printf '%s|%s|abort|%sm|%s|%s\n' "$(date +%F)" "$(date +%H:%M)" "$el" "$task" "${1:-interrupted}" >> "$LOG"
+  rm -f "$STATE"
+  printf '✗ aborted after %sm — logged as interrupted, not done.\n' "$el"
+  printf '   Park it so it is not lost:  /park %s\n' "$task"
+}
+
+cmd_log() {
+  d="${1:-today}"
+  case "$d" in
+    today) pat="^$(date +%F)" ;;
+    all)   pat="." ;;
+    *)     pat="^$d" ;;
+  esac
+  done_n=$(grep -c "|done|" "$LOG" 2>/dev/null); done_n=${done_n:-0}
+  grep "$pat" "$LOG" 2>/dev/null | awk -F'|' '
+    $3=="done"  { printf "  ✓ %s  %-5s %s%s\n", $2, $4, $5, ($6!=""?"  — "$6:"") }
+    $3=="abort" { printf "  ✗ %s  %-5s %s  (%s)\n", $2, $4, $5, $6 }
+  '
+  n=$(grep "$pat" "$LOG" 2>/dev/null | grep -c "|done|"); n=${n:-0}
+  a=$(grep "$pat" "$LOG" 2>/dev/null | grep -c "|abort|"); a=${a:-0}
+  m=$(grep "$pat" "$LOG" 2>/dev/null | grep "|done|" | awk -F'|' '{gsub(/m/,"",$4); s+=$4} END{print s+0}')
+  printf '\n  %s completed · %s interrupted · %sm focused\n' "$n" "$a" "$m"
+}
+
+case "${1:-status}" in
+  start)  shift; cmd_start "$@" ;;
+  status) cmd_status ;;
+  done)   shift; cmd_done "$@" ;;
+  break)  shift; cmd_break "$@" ;;
+  abort)  shift; cmd_abort "$@" ;;
+  log)    shift; cmd_log "$@" ;;
+  preset) printf 'deep     50/10  x3  long 30   architecture, holding a system model\nclassic  25/5   x4  long 20   the standard\nshort    15/5   x4  long 15   when STARTING is the hard part\ngrind    90/20  x2  long 45   long-form review or writing\n' ;;
+  *) echo "usage: pomo {start|status|done|break|abort|log|preset}" >&2; exit 2 ;;
+esac

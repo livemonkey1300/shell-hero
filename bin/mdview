@@ -1,0 +1,132 @@
+#!/usr/bin/env -S python3 -P
+"""mdview [--raw] [--images] [--width N] FILE|- — print a markdown file (or stdin, "-") to the terminal.
+
+Rendered: glow when installed (install glow), else python-rich.
+--raw:    the source, syntax-highlighted by bat.
+--images: draw ```mermaid blocks as pictures (mmdc + Chrome, local only; cached in
+          ~/.cache/mdview). Needs a terminal that shows images (Ghostty) and no pager.
+          Without it, mermaid blocks stay as code with a note.
+Output is coloured even when piped, so `mdview f.md | less -R` works.
+Used by mdv / mdf / mdd / v in ~/.zsh/god.zsh.
+"""
+import glob
+import hashlib
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+MERMAID = re.compile(r"^[ \t]*(```|~~~)[ \t]*mermaid[^\n]*\n(.*?)^[ \t]*\1[ \t]*$", re.S | re.M)
+CACHE = os.path.join(os.environ.get("XDG_CACHE_HOME", os.path.expanduser("~/.cache")), "mdview")
+PUPPETEER = os.path.expanduser("~/.config/mdview/puppeteer.json")
+NOTE = "> ◆ *mermaid diagram — `mdv` in Ghostty draws it as a picture*\n\n"
+
+
+def render_md(text, width):
+    sys.stdout.flush()
+    if shutil.which("glow"):
+        subprocess.run(["glow", "--style=dark", f"--width={width}", "-"], input=text.encode())
+        return
+    from rich.console import Console
+    from rich.markdown import Markdown
+
+    Console(force_terminal=True, color_system="truecolor", width=width).print(
+        Markdown(text, code_theme="monokai", hyperlinks=False)
+    )
+    sys.stdout.flush()
+
+
+def diagram_pngs(codes):
+    """Render each mermaid source to a cached PNG in one mmdc run; returns path or error per code."""
+    os.makedirs(CACHE, exist_ok=True)
+    paths = [os.path.join(CACHE, hashlib.sha1(("dark\0" + c).encode()).hexdigest() + ".png") for c in codes]
+    todo = [(c, p) for c, p in zip(codes, paths) if not os.path.exists(p)]
+    errors = {}
+    if todo:
+        if not shutil.which("mmdc"):
+            return ["mmdc not installed (npm i -g @mermaid-js/mermaid-cli)"] * len(codes)
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "in.md")
+            with open(src, "w") as f:
+                f.write("".join(f"```mermaid\n{c}```\n\n" for c, _ in todo))
+            cmd = ["mmdc", "-q", "-t", "dark", "-b", "transparent", "-s", "2", "-e", "png",
+                   "-i", src, "-o", os.path.join(tmp, "out.md")]
+            if os.path.exists(PUPPETEER):
+                cmd[1:1] = ["-p", PUPPETEER]
+            r = subprocess.run(cmd, capture_output=True, text=True)
+            made = sorted(glob.glob(os.path.join(tmp, "out-*.png")),
+                          key=lambda p: int(re.search(r"-(\d+)\.png$", p).group(1)))
+            if r.returncode != 0 or len(made) != len(todo):
+                # one bad diagram fails the batch: retry one by one to find it
+                for c, p in todo:
+                    one = os.path.join(tmp, "one.mmd")
+                    with open(one, "w") as f:
+                        f.write(c)
+                    r1 = subprocess.run(cmd[:-4] + ["-i", one, "-o", p], capture_output=True, text=True)
+                    if r1.returncode != 0:
+                        errors[p] = (r1.stderr.strip().splitlines() or ["render failed"])[-1]
+            else:
+                for (_, p), m in zip(todo, made):
+                    shutil.move(m, p)
+    return [errors.get(p, p) for p in paths]
+
+
+def main() -> int:
+    args, raw, images, width = sys.argv[1:], False, False, None
+    while args and args[0].startswith("--"):
+        a = args.pop(0)
+        if a == "--":
+            break
+        if a == "--raw":
+            raw = True
+        elif a == "--images":
+            images = True
+        elif a == "--width":
+            width = int(args.pop(0))
+    if not args:
+        print(__doc__.strip(), file=sys.stderr)
+        return 2
+    path = args[0]
+    if path != "-" and not os.path.isfile(path):
+        print(f"mdview: no such file: {path}", file=sys.stderr)
+        return 1
+    width = min(width or shutil.get_terminal_size((100, 40)).columns, 120)
+
+    if raw:
+        os.execvp("bat", ["bat", "--color=always", "--style=numbers,grid", "--paging=never",
+                          "--language=markdown", f"--terminal-width={width}", "--", path])
+
+    if path == "-":
+        text = sys.stdin.read()
+    else:
+        with open(path, encoding="utf-8", errors="replace") as f:
+            text = f.read()
+
+    blocks = list(MERMAID.finditer(text))
+    if not blocks:
+        render_md(text, width)
+        return 0
+    if not images:
+        render_md(MERMAID.sub(lambda m: NOTE + m.group(0), text), width)
+        return 0
+
+    pngs = diagram_pngs([m.group(2) for m in blocks])
+    pos = 0
+    for m, png in zip(blocks, pngs):
+        render_md(text[pos:m.start()], width)
+        if os.path.exists(png):
+            subprocess.run(["imgview", "--no-caption", png])
+        else:
+            render_md(f"> ⚠ mermaid didn't render: {png}\n\n" + m.group(0), width)
+        pos = m.end()
+    render_md(text[pos:], width)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except BrokenPipeError:  # quitting less early
+        sys.exit(0)

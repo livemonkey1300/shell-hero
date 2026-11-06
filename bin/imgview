@@ -1,0 +1,100 @@
+#!/usr/bin/env -S python3 -P
+"""imgview [--width COLS] [--no-caption] IMAGE... — draw images right in the terminal.
+
+Ghostty / kitty / WezTerm: real pixels via the kitty graphics protocol (needs Pillow).
+Elsewhere, or inside tmux: chafa if installed (install the chafa package).
+Sized to fit the window; pass --width to choose the width in columns.
+"""
+import base64
+import fcntl
+import io
+import os
+import shutil
+import struct
+import sys
+import termios
+
+
+def cell_geometry():
+    """(cols, rows, cell_px_w, cell_px_h); pixel sizes are 0 when the terminal won't say."""
+    for fd in (sys.stdout.fileno(), sys.stdin.fileno()):
+        try:
+            rows, cols, xpx, ypx = struct.unpack("HHHH", fcntl.ioctl(fd, termios.TIOCGWINSZ, b"\0" * 8))
+            if cols:
+                return cols, rows, (xpx // cols if xpx else 0), (ypx // rows if ypx else 0)
+        except OSError:
+            pass
+    size = shutil.get_terminal_size((100, 40))
+    return size.columns, size.lines, 0, 0
+
+
+def kitty_ok():
+    if os.environ.get("TMUX"):
+        return False
+    term = os.environ.get("TERM", "") + os.environ.get("TERM_PROGRAM", "")
+    return any(t in term.lower() for t in ("ghostty", "kitty", "wezterm"))
+
+
+def draw_kitty(path, want_cols, caption=True):
+    from PIL import Image, ImageOps
+
+    img = ImageOps.exif_transpose(Image.open(path))
+    w, h = img.size
+    cols, rows, cw, ch = cell_geometry()
+    cw, ch = cw or 10, ch or 20
+    target = min(want_cols or cols - 2, cols - 2, max(1, -(-w // cw)))  # never upscale past natural size
+    if not want_cols:  # also fit the window height
+        max_rows = max(rows - 3, 5)
+        if (target * cw) * h / w / ch > max_rows:
+            target = max(1, int(max_rows * ch * w / h / cw))
+    if w > 2400:  # keep the transfer small; the terminal scales it anyway
+        img = img.resize((2400, max(1, h * 2400 // w)))
+    if img.mode not in ("RGB", "RGBA"):
+        img = img.convert("RGBA")
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    data = base64.standard_b64encode(buf.getvalue())
+
+    out = sys.stdout.buffer
+    for i in range(0, len(data), 4096):
+        chunk, more = data[i:i + 4096], int(i + 4096 < len(data))
+        head = f"f=100,a=T,q=2,c={target},m={more}" if i == 0 else f"m={more}"
+        out.write(b"\033_G" + head.encode() + b";" + chunk + b"\033\\")
+    out.write(b"\n")
+    out.flush()
+    if caption:
+        print(f"\033[2m{os.path.basename(path)}  {w}×{h}  {os.path.getsize(path) // 1024} KB\033[0m")
+
+
+def main():
+    args, want, caption = sys.argv[1:], None, True
+    while args and args[0].startswith("--"):
+        if args[0] == "--width":
+            want, args = int(args[1]), args[2:]
+        elif args[0] == "--no-caption":
+            caption, args = False, args[1:]
+        else:
+            break
+    if not args:
+        print(__doc__.strip(), file=sys.stderr)
+        return 2
+    use_kitty = kitty_ok()
+    if not use_kitty:
+        if shutil.which("chafa"):
+            size = [f"--size={want}x"] if want else []
+            os.execvp("chafa", ["chafa", *size, "--", *args])
+        print("imgview: this terminal can't draw images (tmux/ssh?). Install chafa "
+              "(install the chafa package) or open in the GUI with: imgo FILE", file=sys.stderr)
+        return 1
+    rc = 0
+    for p in args:
+        try:
+            draw_kitty(p, want, caption)
+        except Exception as e:  # noqa: BLE001 — one bad file shouldn't stop the rest
+            print(f"imgview: {p}: {e}", file=sys.stderr)
+            rc = 1
+    return rc
+
+
+if __name__ == "__main__":
+    sys.exit(main())

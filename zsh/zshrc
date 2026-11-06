@@ -1,0 +1,132 @@
+# ~/.zshrc — shell-hero
+#
+# Load order matters, so this file is short and the order is the point:
+#   1. things that may ask for input (SSH key unlock)   — before instant prompt
+#   2. Powerlevel10k instant prompt                     — as early as possible
+#   3. completion paths, then oh-my-zsh + plugins       — oh-my-zsh runs compinit once
+#   4. history, keys, editor                            — core behaviour
+#   5. topic modules in ~/.zsh/*.zsh                    — each skips itself if its tool is missing
+#   6. god.zsh last                                     — zoxide must init after compinit
+#
+# Find anything: press F1 (or run `zhelp`). Edit + reload: `zshrc`, `zgod`.
+# Machine-only settings and secrets: ~/.zshrc.local (never committed).
+
+# --- 1. SSH: unlock FIDO2 security-key identities once per agent (idempotent) ---
+# Needs console input (touch/PIN), so it runs before instant prompt, and only in
+# a real interactive terminal so tool shells never hit ssh-askpass.
+# Rename the keys to yours; missing keys are skipped.
+if [[ -o interactive && -t 0 && -t 1 ]]; then
+  [[ -S "${XDG_RUNTIME_DIR}/ssh-agent.socket" ]] && export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+  __sk_missing=()
+  for __sk_key in "$HOME/.ssh/id_ecdsa_sk" "$HOME/.ssh/id_ecdsa_sk_notouchrequired"; do
+    [[ -f "$__sk_key" && -f "$__sk_key.pub" ]] || continue
+    __sk_fingerprint=$(ssh-keygen -lf "$__sk_key.pub" 2>/dev/null | awk '{print $2}')
+    if [[ -n "$__sk_fingerprint" ]] && ! ssh-add -l 2>/dev/null | grep -q "$__sk_fingerprint"; then
+      __sk_missing+=("$__sk_key")
+    fi
+  done
+  # One call: ssh-add reuses the first passphrase for the rest if they match.
+  (( ${#__sk_missing} )) && ssh-add "${__sk_missing[@]}"
+  unset __sk_missing __sk_key __sk_fingerprint
+fi
+
+# --- 2. Powerlevel10k instant prompt (keep near the top) ---
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# --- 3. oh-my-zsh ---
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Our completions go on fpath BEFORE oh-my-zsh, so its single compinit sees them
+# (a second compinit later would wipe every compdef made in between).
+fpath=($HOME/.zsh/completions $HOME/.zfunc $fpath)
+
+# Order matters: fzf-tab after compinit (oh-my-zsh handles that), and
+# syntax-highlighting must load before history-substring-search, both near the end.
+plugins=(
+  git
+  sudo                  # Esc Esc puts sudo in front
+  extract               # `extract anything.tar.gz`
+  colored-man-pages
+  command-not-found
+  fzf
+  zsh-completions
+  fzf-tab
+  you-should-use        # reminds you when an alias exists for what you typed
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  zsh-history-substring-search
+)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)   # suggest from completion when history has nothing
+YSU_MESSAGE_POSITION="after"                    # you-should-use: one reminder, after the command
+YSU_MODE=BESTMATCH
+
+source $ZSH/oh-my-zsh.sh
+
+# oh-my-zsh's git plugin makes gcm "checkout main"; keep it "commit -m".
+alias gcm='git commit -m'
+
+# fzf-tab replaces zsh's menu selection, so the menu must be off (both patterns:
+# oh-my-zsh sets the more specific one, which outranks the generic).
+zstyle ':completion:*' menu no
+zstyle ':completion:*:*:*:*:*' menu no
+zstyle ':fzf-tab:*' switch-group ',' '.'
+
+# --- 4. Core behaviour ---
+# History: large, shared live across terminals, de-duplicated, timestamped.
+HISTSIZE=100000
+SAVEHIST=100000
+setopt HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS SHARE_HISTORY EXTENDED_HISTORY
+# (HIST_IGNORE_SPACE: start a command with a space to keep it out of history — use it for secrets)
+
+# Keys: Home/End/Ctrl-Delete, Up/Down = history search on what you've typed.
+bindkey '^[[H'    beginning-of-line
+bindkey '^[[F'    end-of-line
+bindkey '^[[1~'   beginning-of-line
+bindkey '^[[4~'   end-of-line
+bindkey '^[[3;5~' kill-word
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+bindkey '^ ' autosuggest-accept                 # Ctrl-Space accepts the grey suggestion
+
+# Editor
+export EDITOR='nvim' VISUAL='nvim'
+alias vim='nvim'
+alias vi='nvim'
+
+# Paths: your own scripts first
+export PATH=$HOME/.local/bin:$HOME/bin:$PATH
+
+# === Terminal tools ===
+# Debian/Ubuntu ship bat as batcat
+if (( $+commands[batcat] )); then alias cat='batcat -p --color=auto'
+elif (( $+commands[bat] ));  then alias cat='bat -p --color=auto'; fi
+alias lg='lazygit'                    # git TUI
+alias rr='yazi'                       # file manager TUI
+alias claudeteam='claude --teammate-mode tmux'  # Claude Code with agent teammates in tmux panes
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+[[ $OSTYPE == linux* ]] && alias ip='ip --color=auto'
+
+# --- 5. Topic modules (each returns early if its tool isn't installed) ---
+autoload -U +X bashcompinit && bashcompinit     # for tools that only ship bash completion
+for __m in docker k8s cloud bazel dev focus; do
+  [[ -r ~/.zsh/$__m.zsh ]] && source ~/.zsh/$__m.zsh
+done
+unset __m
+
+# mise: put the tool versions a project's mise.toml asks for on PATH, switching as you cd.
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+
+# Prompt
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# Machine-local settings and secrets live here, never in the repo.
+[[ -r ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# --- 6. daily shortcuts + zhelp (F1). Keep last. ---
+[[ -r ~/.zsh/god.zsh ]] && source ~/.zsh/god.zsh

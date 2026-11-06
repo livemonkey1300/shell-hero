@@ -1,0 +1,4 @@
+*.bak-*
+sbom.cdx.json
+.PARKED.md
+.zshrc.local

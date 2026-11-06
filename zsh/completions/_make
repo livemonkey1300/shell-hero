@@ -1,0 +1,7 @@
+#compdef make
+_make_dynamic() {
+  local targets
+  targets=(${(f)"$(make -qp 2>/dev/null | awk -F: '/^[a-zA-Z_-]+:/ && !/^\./ && !/Makefile/ {print $1}' | sort -u)"})
+  _describe 'targets' targets
+}
+compdef _make_dynamic make

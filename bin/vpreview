@@ -1,0 +1,18 @@
+#!/bin/sh
+# vpreview FILE [WIDTH] — text preview of any file, for fzf pickers (used by `v`).
+f=$1
+w=${2:-80}
+[ -d "$f" ] && exec eza --tree --level=2 --icons=always --color=always -- "$f"
+case "$(printf %s "$f" | tr '[:upper:]' '[:lower:]')" in
+  *.md|*.markdown) exec mdview --width "$w" -- "$f" ;;
+  *.pdf)
+    pdfinfo "$f" 2>/dev/null | grep -E '^(Title|Author|Pages|Page size):'
+    echo
+    exec pdftotext -l 2 -layout "$f" - 2>/dev/null ;;
+  *.docx|*.doc|*.odt|*.rtf) docview "$f" | mdview --width "$w" - ;;
+  *.png|*.jpg|*.jpeg|*.gif|*.webp|*.bmp|*.tif|*.tiff)
+    if command -v chafa >/dev/null; then exec chafa --size="${w}x${FZF_PREVIEW_LINES:-30}" -- "$f"; fi
+    file -b -- "$f"; ls -lh -- "$f" | awk '{print $5}' ;;
+  *.json) exec jq -C . "$f" ;;
+  *) exec bat --color=always --style=numbers --line-range=:300 --terminal-width="$w" -- "$f" ;;
+esac
