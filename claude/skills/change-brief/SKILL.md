@@ -1,7 +1,7 @@
 ---
 name: change-brief
 description: Turn a code change — the current branch, a pull or merge request (GitHub or GitLab), or a commit range — into a change brief teammates can read without the diff open — what changed and why, risk and rollback, how to test, and the code a reviewer must read. Written as a Markdown file, stopping on secrets first, and published (PR comment, gist, snippet, docs tool) only where and when the user says. Use when the user says "write a change brief", "share this change", "explain this PR to the team", "summarise this branch for the reviewer", or /change-brief. Not for reviewing the change (use /pr-review).
-argument-hint: "[#N | !N | PR/MR URL | a..b | path] [--out <file>]"
+argument-hint: "[#N | !N | PR/MR URL | a..b | path] [--audience eng|pm|mixed] [--pr-body] [--out <file>]"
 ---
 
 # Change brief
@@ -44,13 +44,18 @@ something may leave the team, ask.
 
 ## 3. Write the brief
 
+**Audience** (`--audience`, default `mixed`): `eng` → mechanisms, names, edge cases; `pm` →
+behaviour and user impact, no internals; `mixed` → behaviour first, one line of mechanism per
+point. The audience changes the depth of each section, not which sections exist.
+
 Sections, in this order, each earning its place — **drop one that would be empty**:
 
 1. **Title and one-line summary** — what the change does, for whom. The title is a short name for the
    change ("Retry budget for the ingest worker"), never "Change brief: …".
 2. **Why** — the problem it solves, from the PR description, the commit bodies and the code itself.
-3. **What changed** — a table: area (module or directory) → what changed → files. Group related
-   files.
+3. **What changed** — numbered sections **by feature or theme, not by directory** (typically 2–6):
+   each a sentence of intent and the concrete changes as bullets, with the files that carry them.
+   Never list every file; never paste raw diff here.
 4. **Risk and rollback** — what could break, who is affected, migrations and **one-way doors**
    (stored data, published APIs or ids, a release to users), and how to roll back. A change that
    cannot be rolled back by a revert says so in bold.
@@ -61,11 +66,17 @@ Sections, in this order, each earning its place — **drop one that would be emp
 7. **Open questions** — what the author or reviewer still has to decide.
 8. **Links** — the PR URL, the ticket key, the commit range, as text.
 
-**Every claim comes from what you read; label anything inferred as inferred.** Lead with the
+**Every claim comes from what you read; label anything inferred as inferred. Don't guess intent
+the commits and diff don't support** — "why: not stated in the commits" is a valid line. Lead with the
 conclusion in every section. The repo's spelling convention (Canadian when it states none).
 
-Write it to `--out` if given, else the session scratchpad (else `${TMPDIR:-/tmp}`) as
-`change-brief-<slug>.md`. **Never inside the repo's tracked tree unless the user asks.**
+Write it to `--out` if given, else a fresh file per run in the session scratchpad (else
+`mktemp -t change-brief-XXXXXXXX.md`), so it can be reviewed before it is used anywhere. **Never
+inside the repo's tracked tree unless the user asks.**
+
+**`--pr-body`** (what `/open-pr` uses): the same rules, a shorter shape for a PR/MR description —
+Summary, Ticket (`Refs <KEY>`, never a closing keyword), Changes (the feature-grouped sections),
+How to test, Risk. No excerpts, no open questions, no links section.
 
 ## 4. Offer to publish — never publish unasked
 

@@ -66,6 +66,24 @@ Environments: `<dev>` (safe to break), `<staging>`, `<prod>` (**never touched fr
      unpinned images", "module X is shared by three environments". -->
 - <...>
 
+## Co-change rules
+
+<!-- why: "when you change A, also change B" is the rule the model breaks most, because B is not in
+     the diff it is looking at. Don't put these here: put each in a path-scoped .claude/rules/ file
+     so it loads exactly when A is touched. Example, as .claude/rules/compose-profiles.md: -->
+<!--
+---
+paths:
+  - "compose.yml"
+  - "compose.*.yml"
+---
+# Compose profiles
+Adding a profile to a compose file means documenting it in the `COMPOSE_PROFILES` block of
+`.env.example`, one line: `#   <profile>: <what it starts>`. Why: `.env.example` is the only place a
+newcomer discovers profiles exist. Profiles set automatically by tooling are not documented there.
+-->
+- Path-scoped co-change rules live in `.claude/rules/`: <list them, one line each>.
+
 ## Working agreement (agents)
 <!-- why: the delivery skills (implement-subtask, story-orchestrator, pr-review) read this to know how far they may go. /project-setup fills it in. -->
 - **Autonomy:** <advise | implement + stage | implement + commit + draft PR>. Humans merge, always.

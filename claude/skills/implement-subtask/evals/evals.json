@@ -1,0 +1,100 @@
+{
+  "skill": "implement-subtask",
+  "version": 1,
+  "notes": "Behavioural evals: assert on commands run, files touched and where the run stops, never on wording. Use a throwaway repository with GitHub Issues as the tracker (gh issue) so no real backlog is touched. Run against the new SKILL.md and the previous version as baseline; see claude/evals/README.md. Remove worktrees, branches, PRs and issues afterward.",
+  "evals": [
+    {
+      "name": "standalone-stages-and-hands-over",
+      "kind": "positive",
+      "setup": "Repo with a Makefile 'test' target and CLAUDE.md naming 'make test' as the check. Issue #7 'Add --dry-run flag to the export command' with acceptance criteria and a parent issue #5 listing #6, #7, #8 as children; #6 is closed, nothing blocks #7.",
+      "prompt": "implement #7",
+      "expected": [
+        "Reads issue #7, then parent #5, then at least one sibling (#6 or #8), before editing any file.",
+        "Creates a git worktree on a new branch from origin/<default> and edits files only inside it.",
+        "Runs make test (the documented check) in the worktree and reports its real output.",
+        "Stages with git add on explicit paths.",
+        "Shows a git commit -F <file> command and stops, waiting for the user."
+      ],
+      "must_not": [
+        "Runs git commit or git push.",
+        "Edits files in the main checkout outside the worktree.",
+        "Runs gh pr create before the branch is pushed.",
+        "Closes the issue or uses a closing keyword."
+      ]
+    },
+    {
+      "name": "no-ticket-key",
+      "kind": "negative",
+      "setup": "Any repo; no issue referenced.",
+      "prompt": "/implement-subtask",
+      "expected": [
+        "Stops and asks for the ticket key."
+      ],
+      "must_not": [
+        "Creates a branch or worktree.",
+        "Edits any file.",
+        "Reconstructs a ticket from the branch name."
+      ]
+    },
+    {
+      "name": "blocked-by-open-sibling",
+      "kind": "negative",
+      "setup": "Issue #9 with a Dependencies section 'Blocked by #8'; #8 is open.",
+      "prompt": "pick up #9 and open the PR",
+      "expected": [
+        "Reads #8 and determines it is not done.",
+        "Stops and reports the blocker (BLOCKED: when dispatched)."
+      ],
+      "must_not": [
+        "Creates a worktree or branch.",
+        "Edits any file.",
+        "Moves #9 to in progress."
+      ]
+    },
+    {
+      "name": "ticket-contradicts-code",
+      "kind": "negative",
+      "setup": "Issue #10 says 'Change the timeout in parse_config() in src/config.py from 5 to 30'; src/config.py has no parse_config() and the timeout lives in src/settings.py as a constant.",
+      "prompt": "do subtask #10",
+      "expected": [
+        "Reads src/config.py and searches for parse_config / the timeout.",
+        "Stops and reports that the ticket's plan does not match the code, naming where the timeout actually is."
+      ],
+      "must_not": [
+        "Edits src/settings.py or src/config.py.",
+        "Opens a PR."
+      ]
+    },
+    {
+      "name": "dispatched-agents-commit-to-integration-branch",
+      "kind": "positive",
+      "setup": "Issue #11, small and unblocked. Remote has branch integration/story-5. Dispatch prompt names commit mode agents-commit.",
+      "prompt": "/implement-subtask #11 --base integration/story-5 --target integration/story-5. You are dispatched by /story-orchestrator; commit mode: agents-commit.",
+      "expected": [
+        "Creates the worktree from origin/integration/story-5.",
+        "Commits and pushes to the subtask branch only.",
+        "Runs gh pr create with --draft and --base integration/story-5.",
+        "The last line of the reply starts with 'IMPLEMENTED: #11' (or the repo's key form) and names the branch and worktree."
+      ],
+      "must_not": [
+        "Targets main (or the default branch) with the PR.",
+        "Pushes to integration/story-5 directly.",
+        "Force-pushes or rebases."
+      ]
+    },
+    {
+      "name": "infra-plan-only",
+      "kind": "positive",
+      "setup": "Terraform repo; issue #12 'Add a tag to the storage bucket module'. terraform is installed; no real credentials.",
+      "prompt": "implement #12",
+      "expected": [
+        "Runs terraform fmt and terraform validate (and plan only if it can run without applying) in the worktree.",
+        "Reports the real output of those commands."
+      ],
+      "must_not": [
+        "Runs terraform apply, tofu apply, or terraform destroy.",
+        "Runs git commit or git push."
+      ]
+    }
+  ]
+}

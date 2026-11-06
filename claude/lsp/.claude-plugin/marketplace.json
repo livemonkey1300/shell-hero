@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "repo-lsp",
+  "description": "Repo-local Claude Code LSP plugins for language servers the official marketplace does not cover, or covers with the wrong settings for this repo.",
+  "owner": {
+    "name": "<YOUR_TEAM>"
+  },
+  "plugins": [
+    {
+      "name": "pyrefly-lsp",
+      "description": "Python language server (Pyrefly) for type-aware code intelligence: definitions, references, hover, diagnostics",
+      "version": "1.0.0",
+      "author": {
+        "name": "<YOUR_TEAM>"
+      },
+      "source": "./plugins/pyrefly-lsp",
+      "category": "development",
+      "strict": false,
+      "lspServers": {
+        "pyrefly": {
+          "command": "pyrefly",
+          "args": [
+            "lsp"
+          ],
+          "extensionToLanguage": {
+            ".py": "python",
+            ".pyi": "python"
+          }
+        }
+      }
+    },
+    {
+      "name": "typescript-lsp",
+      "description": "TypeScript/JavaScript language server, pinned to one workspace's TypeScript install",
+      "version": "1.0.0",
+      "author": {
+        "name": "<YOUR_TEAM>"
+      },
+      "source": "./plugins/typescript-lsp",
+      "category": "development",
+      "strict": false,
+      "lspServers": {
+        "typescript": {
+          "command": "typescript-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "initializationOptions": {
+            "tsserver": {
+              "path": "<ABSOLUTE_REPO_PATH>/<web>/node_modules/typescript/lib/tsserver.js"
+            }
+          },
+          "extensionToLanguage": {
+            ".ts": "typescript",
+            ".tsx": "typescriptreact",
+            ".js": "javascript",
+            ".jsx": "javascriptreact",
+            ".mts": "typescript",
+            ".cts": "typescript",
+            ".mjs": "javascript",
+            ".cjs": "javascript"
+          }
+        }
+      }
+    }
+  ]
+}

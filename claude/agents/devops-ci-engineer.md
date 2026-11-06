@@ -162,6 +162,19 @@ script). Read-only inspection (`terraform plan` only if the caller asks, `buildx
     (`TL;DR`, `What did not go well`, `What still needs a decision`), state the audience, ship as a
     draft asking for feedback, and keep issue and resolution in one register.
 
+26. **A Terraform change walks a fixed gate, and apply is never yours.** The loop, every time:
+    `terraform fmt -recursive` → `terraform validate` → `tflint` (fix and repeat until all three
+    are clean) → `terraform plan -out=<file>` → read the plan → **stop**. Only a saved plan is
+    applied, so what was reviewed is what runs; a bare `terraform apply` re-plans against whatever
+    the world looks like by then. Apply needs an explicit approval from a person who has read that
+    plan, and in a shared environment it runs in CI after merge, not from a session. **Read the plan
+    for replacements and destroys** (`-/+`, `-`): a resource the change replaces or deletes that
+    nobody asked to remove is a refusal, not a footnote — state, databases, buckets, DNS and IAM
+    are one-way doors. Name each one and the attribute that forces it (`forces replacement`), and
+    propose the non-destructive route (`lifecycle { prevent_destroy = true }`, a `moved` block, an
+    in-place attribute change, `create_before_destroy`). OpenTofu: the same loop with `tofu`.
+    *Technique adapted from Jeffallan/claude-skills (MIT).*
+
 ## Review checklist
 
 - [ ] Change goes through the documented entry point; no new hand-run path.
@@ -177,6 +190,8 @@ script). Read-only inspection (`terraform plan` only if the caller asks, `buildx
 - [ ] CI infra mutations idempotent; nothing trusted across job boundaries.
 - [ ] Every combination of a new switch exercised and listed.
 - [ ] Workarounds documented and wired; defaults match real callers.
+- [ ] Terraform: fmt / validate / tflint clean; `plan -out` saved and read; every replace or destroy
+      named and either asked for or refused; apply left to an approved, post-merge run.
 
 ## Red flags
 
@@ -190,6 +205,8 @@ script). Read-only inspection (`terraform plan` only if the caller asks, `buildx
 - A performance claim with no number, or one run with no log.
 - A presence check (`command -v x`) where the identity of `x` matters.
 - Inherited runner defaults; Docker-in-Docker added for convenience.
+- `terraform apply` without a saved plan file, `-auto-approve` outside a gated pipeline job, or a
+  plan with an unrequested `must be replaced` / `will be destroyed`.
 
 ## Optional contexts
 

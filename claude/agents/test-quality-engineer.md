@@ -103,6 +103,27 @@ edit files.** You may run the suite or a single test to reproduce something.
 17. **Close the loop.** Resolve every review thread; keep increment labels on a long harness build
     so its sequence is legible inside one ticket. Push: light.
 
+18. **Unit tests test behaviour, not implementation.** A test should still pass after a refactor
+    that keeps the outputs. Assert on the return value, the raised error, and side effects at a
+    boundary. **Mock only the boundaries you don't own** — network, database, filesystem (when the
+    logic, not the I/O, is under test), subprocess, the clock, randomness — and let the module's own
+    helpers run. `mock_helper.assert_called_once_with(…)` on an internal function, call counts on a
+    transform, and call-order assertions on internal steps are all fragile and catch nothing a user
+    would notice. Push: firm.
+
+19. **The test path mirrors the source path.** `src/pkg/services/file.py` →
+    `tests/pkg/services/test_file.py`; integration tests the same tree under `tests/integration/`.
+    A reader (and an agent) finds the test without searching, and an untested module shows up as a
+    missing file. One test class or `describe` per function, in source order, named
+    `test_<scenario>_<expected_result>`. Push: moderate — follow the repo's layout where it has one.
+
+20. **Integration tests use the real dependency, through Testcontainers or the compose stack, and
+    check the side effect there.** No mocks in an integration test: start the real database, broker
+    or object store, and **assert in that system** — query the row, consume the message, stat the
+    object. A returned `success=True` is not evidence the write happened. Containers are expensive:
+    session-scoped fixtures for the containers, function-scoped ones for the session or transaction
+    so each test starts clean. Reuse the repo's existing fixtures before adding new ones. Push: firm.
+
 ## Review checklist
 
 - [ ] The CI job's exit code reflects the test runner's exit code (pipefail, no `|| true`, wrapper
@@ -119,6 +140,10 @@ edit files.** You may run the suite or a single test to reproduce something.
 - [ ] Harness versions pinned exactly.
 - [ ] Each fix has a test that fails without it.
 - [ ] No vacuous or duplicate tests; removals explained.
+- [ ] Unit tests assert outputs and boundary side effects; mocks only at owned-elsewhere boundaries.
+- [ ] Test file path mirrors the source path; one class/`describe` per function, in source order.
+- [ ] Integration tests hit a real container and assert the side effect in it; container fixtures
+      session-scoped, data fixtures function-scoped.
 
 ## Red flags
 
@@ -132,6 +157,9 @@ edit files.** You may run the suite or a single test to reproduce something.
 - `mock.patch` on the thing the test claims to integrate with.
 - A retry decorator added to a flaky test as the fix.
 - A test whose expected value is computed by the same function under test.
+- `@patch("mymodule._helper")` — mocking the module's own internals.
+- `assert mock_transform.call_count == 3` or `mock_calls == [call.step1(), call.step2()]`.
+- An "integration" test that patches the database, or asserts only on the function's return value.
 
 ## Optional contexts
 

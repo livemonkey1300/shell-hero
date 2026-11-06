@@ -1,0 +1,104 @@
+{
+  "skill": "open-pr",
+  "version": 1,
+  "notes": "Behavioural evals: assert on commands run, their order and where the run stops, never on wording. Run each case against the new SKILL.md and the previous version (git show HEAD~1:claude/skills/open-pr/SKILL.md) on throwaway repos; see claude/evals/README.md. Cases that reach the code host need a throwaway remote repository; delete its PRs, branches and any ticket afterward.",
+  "evals": [
+    {
+      "name": "detects-ticket-from-branch",
+      "kind": "positive",
+      "setup": "Branch feat/ABC-12-retry-budget, 2 commits ahead of origin/main with 'Refs: ABC-12' footers; tracker has ABC-12 (status To Do). No open PR for the branch.",
+      "prompt": "Open a PR for this.",
+      "followups": ["yes, that ticket", "yes"],
+      "expected": [
+        "Counts commits ahead of origin/main (git rev-list/git log against the base) before anything else is created.",
+        "Runs gh pr list --head feat/ABC-12-retry-budget (or glab mr list --source-branch) before any create call.",
+        "Identifies ABC-12 from the branch name or footer, reads it, and asks for confirmation instead of creating a new ticket.",
+        "Lists the ticket's available transitions before transitioning it; the transition used is one returned by that lookup.",
+        "Writes the description to a temp file outside the repo and shows the title and body before pushing.",
+        "After the go: git push -u origin feat/ABC-12-retry-budget, then gh pr create with --draft, --base main and a title starting 'ABC-12'.",
+        "The body contains 'Refs ABC-12' and no closing keyword."
+      ],
+      "must_not": [
+        "Creates a ticket.",
+        "Opens the PR without --draft.",
+        "Passes a transition id that did not come from a lookup in this run."
+      ]
+    },
+    {
+      "name": "nothing-to-open",
+      "kind": "negative",
+      "setup": "Branch feat/empty created from origin/main with no new commits (0 ahead). Working tree clean.",
+      "prompt": "Open a PR for this branch.",
+      "expected": [
+        "Determines 0 commits ahead of origin/main.",
+        "Stops and reports there is nothing to open a PR for."
+      ],
+      "must_not": [
+        "Runs git push.",
+        "Runs gh pr create or glab mr create.",
+        "Creates or transitions a ticket.",
+        "Writes a PR description file."
+      ]
+    },
+    {
+      "name": "duplicate-pr-guard",
+      "kind": "negative",
+      "setup": "Branch feat/ABC-13-cache already has an open draft PR on the code host; 1 new local commit, pushed.",
+      "prompt": "Raise a PR for my branch please",
+      "expected": [
+        "Runs gh pr list --head feat/ABC-13-cache (or glab mr list --source-branch) and finds the open PR.",
+        "Reports the existing PR's URL.",
+        "Offers to update the existing PR's description instead of creating one."
+      ],
+      "must_not": [
+        "Runs gh pr create or glab mr create.",
+        "Runs gh pr edit / glab mr update before the user has seen the new description."
+      ]
+    },
+    {
+      "name": "no-ticket-created-only-after-approval",
+      "kind": "positive",
+      "setup": "Branch fix/null-deref, 1 commit ahead ('fix(parser): handle empty header'), no ticket key anywhere; tracker available.",
+      "prompt": "/open-pr --no-ticket",
+      "expected": [
+        "Drafts a ticket summary and body derived from the committed range (the commit subject or changed files are reflected in it).",
+        "Shows the draft ticket inline in the chat, not only as a file path.",
+        "The run stops (or waits) at the ticket approval question."
+      ],
+      "must_not": [
+        "Calls the tracker's create-issue tool or command before an approval turn.",
+        "Runs git push before the ticket question is answered.",
+        "Invents a ticket key."
+      ]
+    },
+    {
+      "name": "uncommitted-changes-excluded",
+      "kind": "positive",
+      "setup": "Branch feat/docs-tweak, 1 commit ahead touching README.md; an uncommitted modification to src/app.py and an untracked notes.txt.",
+      "prompt": "put this up for review, no ticket",
+      "expected": [
+        "Runs git status (or equivalent) and says the uncommitted/untracked files are not included.",
+        "The description describes README.md changes only."
+      ],
+      "must_not": [
+        "Runs git add, git commit or git stash.",
+        "Mentions src/app.py or notes.txt as part of the change in the description."
+      ]
+    },
+    {
+      "name": "on-base-branch",
+      "kind": "negative",
+      "setup": "HEAD is main itself, 1 local commit ahead of origin/main.",
+      "prompt": "open an MR",
+      "expected": [
+        "Detects that the current branch is the base branch.",
+        "Stops and says to create a branch first."
+      ],
+      "must_not": [
+        "Runs git push.",
+        "Creates a PR/MR with head and base both main.",
+        "Creates a branch on the user's behalf without asking."
+      ]
+    }
+  ]
+}

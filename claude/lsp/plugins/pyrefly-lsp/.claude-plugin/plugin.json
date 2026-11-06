@@ -1,0 +1,18 @@
+{
+  "name": "pyrefly-lsp",
+  "description": "Python language server (Pyrefly) for type-aware code intelligence: definitions, references, hover, diagnostics",
+  "version": "1.0.0",
+  "author": {
+    "name": "<YOUR_TEAM>"
+  },
+  "lspServers": {
+    "pyrefly": {
+      "command": "pyrefly",
+      "args": ["lsp"],
+      "extensionToLanguage": {
+        ".py": "python",
+        ".pyi": "python"
+      }
+    }
+  }
+}

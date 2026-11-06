@@ -597,7 +597,8 @@ paths:
 # Prompts built in code
 - Change the prompt, the parser and its test in one commit, and bump the version.
 ```
-Example: `templates/rules/llm-prompts.md`.
+Examples: `templates/rules/llm-prompts.md`, `templates/rules/shell-scripts.md`,
+`templates/rules/code-exploration.md`.
 
 **Prevents.** Paying for every rule in every session, and the important ones getting diluted.
 
@@ -621,6 +622,43 @@ Implement ABC-123 (full ticket text below). Constraints, restated:
 ```
 
 **Prevents.** A subagent that "fixes" a failing test by deleting it.
+
+### Building a repo's Claude context
+
+A monorepo's Claude context (root `CLAUDE.md`, per-package `CLAUDE.md`, `.claude/rules/`, reference
+docs) is itself a design, and it drifts like any other one. Three habits keep it coherent.
+
+**Keep a numbered decision log for the layout itself.** One file (say `.claude/docs/context-decisions.md`)
+with entries `CTX-001`, `CTX-002`…, each dated, with a status and one paragraph: what goes where and
+why. "Per-package first; promote to a shared doc only when a second package needs it." "Commands are
+a two-column table." "Rules are path-scoped unless they apply to every file." When a later package
+forces a change, **amend the entry by id** and record which already-written files need revisiting.
+Ids are referenced from other files, so they are one-way doors (§19).
+
+**Track coverage per area.** A table: area → status (done / pending / needs revision) → its context
+file → notes. It turns "document the repo for Claude" from an open-ended chore into a list, and the
+"needs revision" column is where amendments to the decision log land.
+
+| # | Area | Status | Context file | Revision needed? |
+|---|---|---|---|---|
+| 1 | `services/api` | Done | `services/api/CLAUDE.md` | No |
+| 2 | `web` | Pending | — | — |
+
+**Write child rules as parent + deltas.** A package rule that copies its parent's rules forks them
+(§23). Say what it inherits and state only the difference:
+
+```markdown
+# Go under plugins/
+Inherits every rule in `.claude/rules/go-style.md`. Deltas:
+- `LoadConfig` returns no error by design (zero-config boot): not a finding.
+- `main.go` holds wiring only; any logic there is a finding.
+```
+
+The reader (and the model) can then tell which rules are local, and a change to the parent reaches
+every child without a hunt.
+
+**Prevents.** Five packages documented five different ways, rules that silently diverge from the
+parent they were copied from, and no way to say how much of the repo is covered.
 
 ---
 
@@ -847,6 +885,35 @@ PR do?").
 
 **Prevents.** A skill that works when invoked by name and is never chosen otherwise.
 
+### Measuring a skill: evals
+
+§38 for a prompt built in code scores outputs; a skill is an agent that runs commands, so measure it
+by **what it does**. Keep `skills/<name>/evals/evals.json` next to the skill: 4–6 cases, each a user
+prompt, the repo state it needs, and a list of **observable expectations** — which commands fire, in
+what order, which gate stops the run — plus what must not happen. Never assert on wording.
+
+```json
+{ "name": "nothing-to-open", "kind": "negative",
+  "setup": "Branch is even with origin/main.",
+  "prompt": "Open a PR for this branch.",
+  "expected": ["Finds 0 commits ahead of the base.", "Stops and says there is nothing to open."],
+  "must_not": ["Runs git push.", "Runs gh pr create.", "Creates a ticket."] }
+```
+
+- **Every suite has a negative case**: nothing to do → create nothing (§16). It catches the skill
+  that always produces something.
+- **Every gate has a case that stops at it**, or the next edit deletes the gate unnoticed.
+- **Run the previous version as the baseline**, on throwaway repos and branches, and ship the change
+  when it fixes its case and regresses none. Clean up what the runs created.
+- Run each case as `claude -p … --output-format stream-json --verbose` and grade the tool calls from
+  the transcript. Say the cost first (§39): one case is one full session.
+
+The format and the step-by-step run are in `evals/README.md`; worked suites are in
+`skills/open-pr/evals/`, `skills/pr-review/evals/` and `skills/implement-subtask/evals/`.
+
+**Prevents.** A skill edit that fixes the complaint and quietly drops a gate, and "it seemed better"
+as the only evidence.
+
 ---
 
 ## Part 7: Writing for the human who reads the output
@@ -947,6 +1014,7 @@ Find the symptom, then go to the section.
 | Output mixes in an earlier request | Reused session | §18 |
 | Parser rejects a category the prompt lists | Two sources of truth | §20 |
 | Skill never loads | Description does not trigger | §28, §40 |
+| A skill edit fixed one thing and a gate stopped firing | No behavioural evals | "Measuring a skill: evals" (Part 6) |
 | Subagent ignores a repo rule | Rule not restated in dispatch | §27 |
 | Asks the user what a command could tell it | No "gather first" | §30 |
 | Ends with a menu of options | No convergence | §36 |

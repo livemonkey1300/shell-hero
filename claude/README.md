@@ -58,6 +58,13 @@ claude/
 | `change-brief` | A markdown brief of a change: what and why, risk and rollback, how to test, the code a reviewer must read | |
 | `expert-panel` | Convene ≤5 role agents on a design question in parallel, then synthesise one answer with disagreements and one-way doors | the role agents below |
 | `project-setup` | Make a repo agent-ready: CLAUDE.md from its real commands, rules, specialists picked by its stack, permission allow-list, the delivery loop wired | the kit's `install.sh` |
+| `open-pr` | Open a draft PR/MR from committed work: stops when nothing is ahead, guards against duplicates, looks up tracker transitions, shows the description first | `gh` or `glab` |
+| **Business** (Canada) | see [`business/README.md`](business/README.md) | set `<PROVINCE>` |
+| `finance-ops` | chart of accounts, monthly close, runway, invoices with the right GST/HST/QST lines, filing calendar; never moves money or files | xlsx skill optional |
+| `sales-outreach` | ideal customer, prospects, sequences, objections, CRM. **CASL gate per recipient**; refuses harvesting and scraping | |
+| `brand-voice` | voice, pillars, style sheet, AI-slop review, bilingual EN/FR for Quebec | |
+| `support-triage` | redact personal info, then themes by cost, canned replies, escalation and privacy-incident path | |
+| `legal-drafts` | privacy policy (PIPEDA / Law 25), terms, contractor and NDA checklists, CASL policy; **drafts for a lawyer, never advice** | |
 
 ### Agents
 
@@ -69,6 +76,8 @@ claude/
 | `product-owner` | Runs the TDD ticket loop: developer → reviewer → developer → reviewer → writer | dispatches the three above |
 | `docker-build-expert` | How each Dockerfile is really built (bake, compose, CLIs, CI, Bazel) | read-only |
 | `vscode-extension-ux-reviewer` | UX review of a VS Code extension's flow in terms of the VS Code API | read-only |
+| `go-reviewer` | Go idiom review grounded in Effective Go and the style guides; names where a house rule departs from idiom | read-only |
+| `business-advisor` | Founder decisions: pricing, unit economics, runway, incorporation; routes to the business skills | read-only + web |
 
 **Specialist role agents.** These are advisers, all read-only. Each grounds itself in your repo first (README, CLAUDE.md, ADRs, `git log`, the actual files). It answers verdict-first with `file:line` evidence, labels every claim verified / read in code / inferred / couldn't determine, gives one recommendation, and flags one-way doors. Specialist knowledge such as air-gapped delivery, defence and regulated standards, or geospatial work sits in optional sections; nothing is assumed.
 
@@ -92,6 +101,12 @@ claude/
 | shared libraries, devcontainers, onboarding friction, build/runtime plumbing | `platform-library-engineer` |
 
 The **reviewer** can pull in up to two of these for domain checks, and **expert-panel** convenes several at once. They come from real senior engineers' review habits, anonymized and stripped of any employer-specific context.
+
+### Also in here
+
+- [`evals/`](evals/README.md): **behavioural tests for skills**. Each is a prompt plus the observable behaviour it must produce, including a "nothing to do" case. `pr-review`, `implement-subtask` and `open-pr` ship with suites.
+- [`lsp/`](lsp/README.md): a repo-local plugin marketplace that gives Claude real language servers (Python, TypeScript). Its README covers the silent `lspServers` trap.
+- `templates/rules/`: `code-exploration.md` (which search tool first), `shell-scripts.md` (POSIX by default), `llm-prompts.md`.
 
 ### bin
 
@@ -129,7 +144,7 @@ mkdir -p ~/.claude/agents && cp claude/agents/reviewer.md ~/.claude/agents/
 [`BOOTSTRAP.md`](BOOTSTRAP.md): one round of questions, a dry run, then the install, plus
 [`/project-setup`](skills/project-setup/SKILL.md) for a project of yours.
 
-**By hand, with the installer.** Packs are `focus`, `writing`, `engineering`, `workflow` and `roles`:
+**By hand, with the installer.** Packs are `focus`, `writing`, `engineering`, `workflow`, `roles` and `business`:
 ```sh
 claude/install.sh --list                          # what's in each pack, and what you already have
 claude/install.sh --all --dry-run                 # show, change nothing

@@ -68,6 +68,11 @@ Show the user the before and after of the changed passages, briefly — not the 
   regression). For a prompt with an eval suite, offer a measured run: **say how many real model
   requests it costs before running anything**, and run it only when the change is about output
   quality.
+- **Behaviour** (skills): if the skill has `evals/evals.json`, run its cases against the new version
+  and the previous one as baseline (the method is in the kit's `evals/README.md`; the reasoning in
+  `prompt-engineering.md`, "Measuring a skill: evals"). No evals and the skill has a gate or acts
+  outside the session → add 4–6 cases, including a negative "nothing to do → create nothing" case,
+  before changing it. Assert on commands and stops, never wording; say the cost before running.
 - **Triggering** (skills): does the description fire on the phrases users really say, and stay quiet
   on near-misses? Name two of each in your hand-back.
 

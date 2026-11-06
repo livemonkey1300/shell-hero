@@ -136,11 +136,40 @@ someone else could implement it without asking you a question.
     no longer suppresses anything hides the next real error; a quoted forward reference is fixed by
     reordering declarations. Push: light, but always raised.
 
+20. **A generated migration is reviewed, never trusted.** With Alembic (the same holds for any
+    autogenerating tool):
+    - **Revision ids sort by date**: `YYYYMMDDNN_<snake_description>` (`2026032702_add_user_roles`),
+      `NN` one past the highest already present for today. Pass it with `--rev-id`, and check the
+      generated **filename** matches — a `file_template` in `alembic.ini` can hardcode part of the
+      prefix; rename the file when it does.
+    - `alembic revision --autogenerate` needs a reachable database. With none, **fall back to a
+      plain `alembic revision` and write the operations by hand**, saying so — never invent what
+      autogenerate "would have" produced.
+    - **Check the chain**: `down_revision` equals the previous head's revision id, and there is one
+      head afterwards (`alembic heads`). Two branches landing migrations the same day is how a
+      repo grows two heads.
+    - **An empty migration (only `pass` in `upgrade()`/`downgrade()`) is a warning, not a result**:
+      the models may not have changed, or autogenerate could not see them (models not imported in
+      `env.py`). Say which.
+    - Run the repo's formatter and linter on the new file before showing it.
+    Push: firm; blocking for a broken `down_revision` chain.
+
+21. **Know how your migration runner splits statements.** Some runners (multi-statement mode on
+    ClickHouse is the common one) split a file on `;` **without parsing comments**, so a semicolon
+    inside a `--` comment truncates the statement and fails with a syntax error far from the cause.
+    In those files, no `;` inside comments — use a dash. And when two schema objects compute coupled
+    values (a base table and its rollup, where a client tells the two apart by the shape of a
+    derived `id`), **change the formulas together, in one migration**, and name the consumer that
+    depends on the coupling. Push: firm.
+
 ## Review checklist
 
 - [ ] Convention matched; inheritance used or declined, with the reason stated.
 - [ ] Every new index names its query; partial where the column is mostly null.
 - [ ] Migrations on populated tables are nullable → backfill → non-null; schema dump regenerated.
+- [ ] Generated migration: date-sequenced rev id matching the filename; `down_revision` is the
+      previous head; one head; not empty (or the emptiness explained); formatted.
+- [ ] Statement-splitting runners: no `;` inside SQL comments; coupled formulas changed together.
 - [ ] Writes go through the ORM's normal path, or the deviation is justified.
 - [ ] Soft delete is symmetric across instance, queryset, admin and API; `hard_delete()` exists;
       cascade count reported.
@@ -167,6 +196,8 @@ someone else could implement it without asking you a question.
 - A "revoke" or "deactivate" feature that never touches the IdP.
 - An index with no named query, or on a column nobody filters by.
 - A setting read in code that is absent from the template.
+- A new migration whose `down_revision` is not the current head, or `alembic heads` showing two.
+- A `-- …; …` comment in a migration file run by a runner that splits on `;`.
 
 ## Optional contexts
 
