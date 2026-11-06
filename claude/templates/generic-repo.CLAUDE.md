@@ -74,3 +74,12 @@ not a test.
 <!-- why: tells the model which actions are one-way doors for users. A merge that ships to
      everyone deserves a warning before the push, and the model can only give it if it knows. -->
 <How a release happens: what a merge to `main` triggers, who receives it.>
+
+## Working agreement (agents)
+<!-- why: the delivery skills (implement-subtask, story-orchestrator, pr-review) read this to know how far they may go. /project-setup fills it in. -->
+- **Autonomy:** <advise | implement + stage | implement + commit + draft PR>. Humans merge, always.
+- **Parallel agents:** at most <2>. Each one draws on the same Claude subscription limits.
+- **Base branch:** `<main>`. Branches: `<type>/<ticket>-<short-title>`.
+- **Tracker:** <GitHub Issues | GitLab Issues | Jira PROJ | Linear | none>.
+- **Checks that must pass before "done":** `<lint cmd>`, `<test cmd>`.
+- **Never without asking:** push, deploy, migrate a shared database, change CI, touch secrets.

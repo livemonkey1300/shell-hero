@@ -106,3 +106,12 @@ A new test suite goes into its package's `test` script **and** the matching CI j
 <!-- why: merging is a one-way door for every user; the model should say so before a push. -->
 Push to `main` → CI tags `vX.Y.Z`, builds every package at one version, and publishes the release.
 Branch pipelines build `<next>-dev.<n>` and never release.
+
+## Working agreement (agents)
+<!-- why: the delivery skills (implement-subtask, story-orchestrator, pr-review) read this to know how far they may go. /project-setup fills it in. -->
+- **Autonomy:** <advise | implement + stage | implement + commit + draft PR>. Humans merge, always.
+- **Parallel agents:** at most <2>. Each one draws on the same Claude subscription limits.
+- **Base branch:** `<main>`. Branches: `<type>/<ticket>-<short-title>`.
+- **Tracker:** <GitHub Issues | GitLab Issues | Jira PROJ | Linear | none>.
+- **Checks that must pass before "done":** `<lint cmd>`, `<test cmd>`.
+- **Never without asking:** push, deploy, migrate a shared database, change CI, touch secrets.

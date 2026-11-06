@@ -65,3 +65,12 @@ Environments: `<dev>` (safe to break), `<staging>`, `<prod>` (**never touched fr
 <!-- why: the specific traps of this estate, e.g. "the staging cluster has a webhook that rejects
      unpinned images", "module X is shared by three environments". -->
 - <...>
+
+## Working agreement (agents)
+<!-- why: the delivery skills (implement-subtask, story-orchestrator, pr-review) read this to know how far they may go. /project-setup fills it in. -->
+- **Autonomy:** <advise | implement + stage | implement + commit + draft PR>. Humans merge, always.
+- **Parallel agents:** at most <2>. Each one draws on the same Claude subscription limits.
+- **Base branch:** `<main>`. Branches: `<type>/<ticket>-<short-title>`.
+- **Tracker:** <GitHub Issues | GitLab Issues | Jira PROJ | Linear | none>.
+- **Checks that must pass before "done":** `<lint cmd>`, `<test cmd>`.
+- **Never without asking:** push, deploy, migrate a shared database, change CI, touch secrets.

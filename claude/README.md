@@ -57,6 +57,7 @@ claude/
 | `pr-feedback` | Act on review comments: sort must-fix / should-fix / question / disagree, fix, check, one reply covering every thread | `gh` or `glab` |
 | `change-brief` | A markdown brief of a change: what and why, risk and rollback, how to test, the code a reviewer must read | |
 | `expert-panel` | Convene ≤5 role agents on a design question in parallel, then synthesise one answer with disagreements and one-way doors | the role agents below |
+| `project-setup` | Make a repo agent-ready: CLAUDE.md from its real commands, rules, specialists picked by its stack, permission allow-list, the delivery loop wired | the kit's `install.sh` |
 
 ### Agents
 
@@ -124,18 +125,20 @@ mkdir -p ~/.claude/skills && cp -r claude/skills/park ~/.claude/skills/
 mkdir -p ~/.claude/agents && cp claude/agents/reviewer.md ~/.claude/agents/
 ```
 
-**Everything at once.** Run from the directory that contains `claude/`. It does not overwrite your
-existing `~/.claude/CLAUDE.md`:
+**Easiest: ask Claude.** Open Claude Code in this repo and say *"set me up"*. It follows
+[`BOOTSTRAP.md`](BOOTSTRAP.md): one round of questions, a dry run, then the install, plus
+[`/project-setup`](skills/project-setup/SKILL.md) for a project of yours.
+
+**By hand, with the installer.** Packs are `focus`, `writing`, `engineering`, `workflow` and `roles`:
 ```sh
-K=claude
-mkdir -p ~/.claude/skills ~/.claude/agents ~/.claude/bin
-cp -rn "$K"/skills/* ~/.claude/skills/
-cp -n  "$K"/agents/*.md ~/.claude/agents/
-cp -n  "$K"/bin/* ~/.claude/bin/ && chmod +x ~/.claude/bin/pomo ~/.claude/bin/statusline.sh
-[ -e ~/.claude/CLAUDE.md ] || cp "$K"/CLAUDE.md.global ~/.claude/CLAUDE.md
+claude/install.sh --list                          # what's in each pack, and what you already have
+claude/install.sh --all --dry-run                 # show, change nothing
+claude/install.sh --pack focus,engineering        # into ~/.claude
+claude/install.sh --pack workflow,roles --project ~/code/my-app   # into that repo's .claude/
+claude/install.sh --all --update                  # also replace items you edited (yours → ~/.claude/.kit-backups/)
 ```
-`-n` never overwrites: re-running it is safe, and it will not clobber a skill you have edited. Drop
-the `-n` to update.
+It never overwrites silently: an item that differs from the kit is skipped and named, unless you pass
+`--update`. The global `CLAUDE.md` is never touched by the script; copy it yourself, or let Claude merge it.
 
 **Status line**: add to `~/.claude/settings.json`:
 ```json

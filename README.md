@@ -10,7 +10,23 @@ My terminal setup and everything I learned building it, in one repo:
 
 Everything is generic. No employer code, names or secrets; machine-specific things go in `~/.zshrc.local`.
 
-## Quick start
+## Set up with Claude (easiest)
+
+Clone it, open Claude Code inside it, and ask:
+
+```sh
+git clone https://github.com/livemonkey1300/shell-hero && cd shell-hero && claude
+```
+> Read this project and set me up: install the skills, agents and commands, and set up an agentic workflow for my project at `~/code/my-app`.
+
+Claude follows [`claude/BOOTSTRAP.md`](claude/BOOTSTRAP.md):
+- **one round of questions:** which packs, your working style, the status line, your shell;
+- **a dry run first**, then the install;
+- **then your project:** a CLAUDE.md built from its real commands, the specialists that fit its stack, and the ticket → plan → implement → review → PR loop.
+
+It uses **your own Claude subscription**. Nothing is overwritten without a backup, and nothing is committed.
+
+## Quick start (shell only, by hand)
 
 ```sh
 git clone <this-repo> ~/perso/shell-hero
