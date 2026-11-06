@@ -19,6 +19,9 @@ engineering pack is in [`../README.md`](../README.md).
 | `brand-voice` (skill) | Voice and tone, messaging pillars, style sheet, line-by-line copy review for "AI slop", English/French for Quebec | publish, invent proof, treat machine French as final |
 | `support-triage` (skill) | Redacts a ticket CSV, then mines themes ranked by cost, writes macros, sets escalation including a privacy-incident path | reply to customers, touch the help desk, decide a breach is not reportable |
 | `legal-drafts` (skill) | Privacy policy (PIPEDA / Law 25), website terms, contractor checklist, CASL policy, NDA review — every output bannered as a draft for a lawyer | give advice, call anything compliant, sign or send |
+| `launch-kit` (skill) | Positioning, taglines, launch-day timeline and copy for Product Hunt, itch.io, Show HN, newsletters; emails through the sales-outreach CASL gate | post, send, trade votes, use sockpuppets or undisclosed paid endorsements |
+| `blog-post` (skill) | One reader, one question: researched outline and draft with every claim cited, brand-voice review, publishing checklist | publish, scrape behind logins, quote customers without written permission |
+| `store-review` (skill) | Order/sales/returns CSVs → one-page review: revenue, AOV, repeat rate, cohorts, returns, margin, three ranked actions; computed by script on redacted data | keep personal info in the analysis, scrape competitors, file taxes |
 | `business-advisor` (agent) | Pricing, unit economics, runway, federal vs provincial incorporation, what to do first; one recommendation, one-way doors flagged; routes to the skills and to the technical role agents | edit files, act, settle tax or legal questions |
 
 ## Scope: Canada, every province, Quebec in detail

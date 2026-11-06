@@ -35,6 +35,7 @@ Ask these four together:
    - **Claude kit, `focus`**: park, reload, decide, pomodoro, status line;
    - **Claude kit, `engineering`**: start-work, add-feature, plan, review, rebase, commit, change-brief, project-setup;
    - **Claude kit, `workflow`**: the agent loop (ticket → plan → implement → review → PR) plus developer and reviewer agents;
+   - **Claude kit, `ops`**: debug a failing pod, SLOs and runbooks, cloud-bill waste (read-only by default);
    - **Claude kit, `roles`**: 18 specialist advisers;
    - **Claude kit, `writing`**: grammar and message shaping;
    - **Claude kit, `business`**: run a small company in Canada: finance with GST/HST/QST, CASL-safe sales, brand voice, support, legal drafts. Ask for their `<PROVINCE>` in the same round, and point them at `claude/business/README.md`;

@@ -58,13 +58,25 @@ claude/
 | `change-brief` | A markdown brief of a change: what and why, risk and rollback, how to test, the code a reviewer must read | |
 | `expert-panel` | Convene ≤5 role agents on a design question in parallel, then synthesise one answer with disagreements and one-way doors | the role agents below |
 | `project-setup` | Make a repo agent-ready: CLAUDE.md from its real commands, rules, specialists picked by its stack, permission allow-list, the delivery loop wired | the kit's `install.sh` |
+| `adr` | Architecture decision records: triage whether one is needed, draft, supersede with links both ways | |
+| `spec-miner` | Reverse-engineer what the code does today into `SPEC.md`, every claim with `file:line` | |
+| `cli-tool` | Robust POSIX/bash scripts and small CLIs: quoting, exit codes, dry-run, portable flags, shellcheck, a test | |
 | `open-pr` | Open a draft PR/MR from committed work: stops when nothing is ahead, guards against duplicates, looks up tracker transitions, shows the description first | `gh` or `glab` |
+| `handoff` | Stop a long session before context fills; a ≤40-line note a fresh session continues from | |
+| `memory-sleep` | Keep a memory file small: add only durable lessons, consolidate ("sleep") past its cap, with a backup | |
+| **Ops** | | |
+| `k8s-debug` | Diagnose a failing pod by symptom, read-only; mutations shown and run only on a yes (prod-like contexts need the name typed back) | `kubectl` |
+| `slo-runbook` | SLIs/SLOs with error-budget and burn-rate maths, one-page runbooks, blameless postmortems | |
+| `cloud-cost` | Find waste in a billing export, computed by script; ranked savings, never deletes or buys | billing export |
 | **Business** (Canada) | see [`business/README.md`](business/README.md) | set `<PROVINCE>` |
 | `finance-ops` | chart of accounts, monthly close, runway, invoices with the right GST/HST/QST lines, filing calendar; never moves money or files | xlsx skill optional |
 | `sales-outreach` | ideal customer, prospects, sequences, objections, CRM. **CASL gate per recipient**; refuses harvesting and scraping | |
 | `brand-voice` | voice, pillars, style sheet, AI-slop review, bilingual EN/FR for Quebec | |
 | `support-triage` | redact personal info, then themes by cost, canned replies, escalation and privacy-incident path | |
 | `legal-drafts` | privacy policy (PIPEDA / Law 25), terms, contractor and NDA checklists, CASL policy; **drafts for a lawyer, never advice** | |
+| `launch-kit` | Launch copy and timeline (Product Hunt, itch, Show HN, newsletter); drafts only, CASL gate, no vote manipulation | |
+| `blog-post` | Research and write a post or case study with cited claims; never publishes | |
+| `store-review` | Order/sales CSVs → business review with KPIs and 3 actions; personal info redacted first | |
 | **Games** | | |
 | `game-start` | Idea → one-page design → playable grey-box loop with deterministic tests; originality gate (no remakes of existing games) | |
 | `game-art` | Art, animation and sound **as code**: palette pixel art, vector sprites, particles, Web Audio effects; flashing/colour-blind/motion checks | |
@@ -149,7 +161,7 @@ mkdir -p ~/.claude/agents && cp claude/agents/reviewer.md ~/.claude/agents/
 [`BOOTSTRAP.md`](BOOTSTRAP.md): one round of questions, a dry run, then the install, plus
 [`/project-setup`](skills/project-setup/SKILL.md) for a project of yours.
 
-**By hand, with the installer.** Packs are `focus`, `writing`, `engineering`, `workflow`, `roles`, `business` and `games`:
+**By hand, with the installer.** Packs are `focus`, `writing`, `engineering`, `workflow`, `ops`, `roles`, `business` and `games`:
 ```sh
 claude/install.sh --list                          # what's in each pack, and what you already have
 claude/install.sh --all --dry-run                 # show, change nothing

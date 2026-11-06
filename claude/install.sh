@@ -23,22 +23,24 @@ pack_items() {
   case $1 in
     focus)       echo "skill:park skill:reload skill:loose-ends skill:what-now skill:decide skill:pomo skill:pomo-done skill:pomo-review bin:pomo bin:statusline.sh" ;;
     writing)     echo "skill:fix skill:fix-org skill:fix-org-src skill:fix-org-ask skill:help-me" ;;
-    engineering) echo "skill:start-work skill:add-feature skill:technical-plan skill:rebase skill:fast-commit skill:pr-review skill:pr-feedback skill:change-brief skill:edit-prompt skill:project-setup" ;;
-    workflow)    echo "skill:ticket-writer skill:plan-to-tickets skill:implement-subtask skill:story-orchestrator skill:open-pr skill:expert-panel agent:developer agent:reviewer agent:technical-writer agent:product-owner" ;;
+    engineering) echo "skill:start-work skill:add-feature skill:technical-plan skill:rebase skill:fast-commit skill:pr-review skill:pr-feedback skill:change-brief skill:edit-prompt skill:project-setup skill:adr skill:spec-miner skill:cli-tool" ;;
+    workflow)    echo "skill:ticket-writer skill:plan-to-tickets skill:implement-subtask skill:story-orchestrator skill:open-pr skill:expert-panel skill:handoff skill:memory-sleep agent:developer agent:reviewer agent:technical-writer agent:product-owner" ;;
     roles)       echo "agent:principal-architect agent:security-architect agent:tech-researcher agent:generalist-oracle agent:kubernetes-helm-engineer agent:devops-ci-engineer agent:supply-chain-engineer agent:cloud-architect agent:sre-observability-engineer agent:container-security-reviewer agent:backend-engineer agent:frontend-engineer agent:integration-engineer agent:test-quality-engineer agent:llm-feature-engineer agent:platform-library-engineer agent:docker-build-expert agent:vscode-extension-ux-reviewer agent:go-reviewer" ;;
-    business)    echo "skill:finance-ops skill:sales-outreach skill:brand-voice skill:support-triage skill:legal-drafts agent:business-advisor" ;;
+    business)    echo "skill:finance-ops skill:sales-outreach skill:brand-voice skill:support-triage skill:legal-drafts skill:launch-kit skill:blog-post skill:store-review agent:business-advisor" ;;
+    ops)         echo "skill:k8s-debug skill:slo-runbook skill:cloud-cost" ;;
     games)       echo "skill:game-start skill:game-art skill:game-ship agent:game-designer" ;;
     *) return 1 ;;
   esac
 }
-PACKS="focus writing engineering workflow roles business games"
+PACKS="focus writing engineering workflow ops roles business games"
 pack_blurb() {
   case $1 in
     focus)       echo "working memory: park, reload, decide, pomodoro, status line" ;;
     writing)     echo "grammar fix and message structuring, cheatsheet lookup" ;;
-    engineering) echo "start work, add a feature, plan, rebase, commit, review, change brief, set up a project" ;;
-    workflow)    echo "the agentic loop: ticket → plan → implement → review → PR, panel of experts" ;;
-    business)    echo "run a small company in Canada: finance and GST/HST/QST, CASL-safe sales, brand voice, support, legal drafts" ;;
+    engineering) echo "start work, add a feature, plan, rebase, commit, review, change brief, set up a project, ADRs, spec from code, CLI scripts" ;;
+    workflow)    echo "the agentic loop: ticket → plan → implement → review → PR, panel of experts, handoff notes and memory that stays small" ;;
+    business)    echo "run a small company in Canada: finance and GST/HST/QST, CASL-safe sales, brand voice, support, legal drafts, launches, blog posts, store reviews" ;;
+    ops)         echo "operate it: debug a failing pod, SLOs and runbooks, find waste in a cloud bill (all read-only by default)" ;;
     games)       echo "make original video games: idea → playable loop, art and sound as code, release checklist, playtest reviewer" ;;
     roles)       echo "19 read-only specialist advisers (architecture, security, k8s, CI, backend, frontend…)" ;;
   esac
