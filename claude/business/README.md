@@ -48,14 +48,14 @@ Put this in your project's `CLAUDE.md` so every skill finds it without asking:
 
 ## Install
 
-The installer does not know this pack yet. Copy by hand:
-
 ```sh
-for s in finance-ops sales-outreach brand-voice support-triage legal-drafts; do
-  mkdir -p ~/.claude/skills && cp -r claude/skills/$s ~/.claude/skills/
-done
-mkdir -p ~/.claude/agents && cp claude/agents/business-advisor.md ~/.claude/agents/
+claude/install.sh --pack business                         # into ~/.claude
+claude/install.sh --pack business --project ~/code/my-co  # or into a project
 ```
+Or ask Claude in this repo: *"set me up with the business pack"*.
+
+**In Quebec?** Start from [`presets/quebec.md`](presets/quebec.md): GST + QST, Revenu Québec,
+Law 25 and French-first documents, already filled in.
 
 ## Your first week, using the pack
 
