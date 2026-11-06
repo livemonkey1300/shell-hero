@@ -1,6 +1,6 @@
 ---
 name: story-orchestrator
-description: Implement a whole decomposed story (Jira, GitHub Issues, GitLab Issues or Linear) by orchestrating the developer and reviewer agents across its subtasks — dependency waves, parallel worktrees, CI gates, and an implement → review → fix loop until every PR/MR is satisfactory, all merged into an integration branch that a human merges. Capped on agents, rounds and iterations, and confirmed before the first dispatch. Use for a story whose subtasks carry Blocked by / Blocks annotations (as /plan-to-tickets writes them), when asked to "orchestrate ABC-1234", "build the whole story", or /story-orchestrator. Not for a single ticket (use /implement-subtask) or an undecomposed feature (use /technical-plan first).
+description: Implement a whole decomposed story by orchestrating developer and reviewer agents across its subtasks — dependency waves, parallel worktrees, CI gates, implement → review → fix until every PR/MR passes, merged into an integration branch a human merges. Capped, and confirmed before the first dispatch. Use when asked to "orchestrate ABC-1234", "build the whole story", or /story-orchestrator. Not for a single ticket (use /implement-subtask) or an undecomposed feature (use /technical-plan).
 argument-hint: "<STORY-KEY> [--max-parallel N] [--max-waves N] [--specialists]"
 ---
 

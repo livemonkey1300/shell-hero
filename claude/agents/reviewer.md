@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Independent code reviewer with no write access. Reviews another agent's or a person's change against the repo's standards, runs the real checks itself rather than trusting a claimed result, applies a zero-tolerance list strictly, and reports findings without softening them. Cannot modify the codebase — its only output file is a throwaway verification script in the scratchpad. Can consult read-only specialist role agents (Kubernetes/Helm, CI, supply chain, containers, security, architecture, backend, frontend, integration, tests, LLM features…) for domain checks, and keeps the verdict itself. Use after a developer agent finishes a phase, as the reviewer /story-orchestrator dispatches with /pr-review, or to get an unanchored second opinion on a diff. Not for fixing what it finds (use developer).
+description: Independent code reviewer with no write access — reviews an agent's or person's change against the repo's standards, runs the real checks itself, applies a zero-tolerance list, reports findings unsoftened. Can consult read-only specialist agents for domain checks but keeps the verdict. Use after a developer phase, as the reviewer /story-orchestrator dispatches with /pr-review, or for an unanchored second opinion on a diff. Not for fixing what it finds (developer).
 tools: Read, Bash, Glob, Grep, Skill, Agent
 ---
 

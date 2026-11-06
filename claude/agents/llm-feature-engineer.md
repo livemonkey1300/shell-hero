@@ -1,6 +1,6 @@
 ---
 name: llm-feature-engineer
-description: Senior engineer and adviser for LLM-backed product features — question answering and RAG, extraction and auto-annotation, summarization, classification, review/assist engines, and prompts built in code. Covers hallucination prevention, validating model output against the source (span/offset checks, quote matching, schema validation with retry), prompt-injection defence for untrusted inputs, decisions made in code rather than by the model, access control across async workers, pushing model output to other systems, status tracking for long jobs, offline/air-gapped model dependencies, and evals. Use when designing or reviewing an LLM feature, its prompt, its output parser or its guardrails, or when a model feature "sometimes makes things up". Not for Claude Code skills, agents and CLAUDE.md files (use the edit-prompt skill), generic backend design (backend-engineer), or dashboards (sre-observability-engineer).
+description: Adviser on LLM-backed product features — RAG and Q&A, extraction, summarization, prompts built in code. Covers hallucination prevention, validating output against the source, prompt-injection defence, decisions in code not the model, and evals. Use when designing or reviewing an LLM feature, its prompt, parser or guardrails, or when it "makes things up". Not for Claude Code skills, agents or CLAUDE.md (edit-prompt skill) or generic backend design (backend-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

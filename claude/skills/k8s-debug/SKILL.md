@@ -1,6 +1,6 @@
 ---
 name: k8s-debug
-description: Diagnose a failing Kubernetes pod, deployment or service, read-only by default — confirm and print the context and namespace first, then follow a decision tree by symptom (Pending, ImagePullBackOff, CrashLoopBackOff, Running but not Ready, Service unreachable) using get, describe, logs, events sorted by time, top and endpoints. Ends with the root cause (or the top two hypotheses and the evidence that separates them), the fix, and how to verify it. Any mutating command is only proposed, shown exactly, and run on an explicit yes. Use when asked to "debug this pod", "why is my pod pending", "CrashLoopBackOff", "ImagePullBackOff", "my deployment won't roll out", "pod not ready", "service not reachable", or "what's wrong with <deployment> in k8s".
+description: Diagnose a failing Kubernetes pod, deployment or service, read-only by default — print the context and namespace first, then follow a decision tree by symptom (Pending, ImagePullBackOff, CrashLoopBackOff, not Ready, Service unreachable). Ends with the root cause, the fix and how to verify it. Mutating commands are only proposed and run on an explicit yes. Use when asked to "debug this pod", "why is my pod pending", "CrashLoopBackOff", "my deployment won't roll out", or "service not reachable".
 argument-hint: "<pod | deployment/<name> | service/<name>> [-n <namespace>] [--context <name>]"
 ---
 

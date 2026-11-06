@@ -1,6 +1,6 @@
 ---
 name: technical-writer
-description: Writes and updates documentation — READMEs, contributor guides, architecture and runtime documents, API references, deployment and operations guides, ADRs and agent-facing instructions (CLAUDE.md, rules). Reads the real code to find its purpose, then writes for the correct audience. Does not change source, tests, docstrings or comments, and describes only the system that exists today. Use after a change lands, or when asked to "document this", "update the README", "write the runbook". Not for a change brief for reviewers (use /change-brief) or a ticket (use /ticket-writer).
+description: Writes and updates documentation — READMEs, contributor guides, architecture and operations docs, API references, ADRs and agent instructions (CLAUDE.md, rules). Reads the real code, writes for the right audience, describes only the system that exists today, and never changes source, tests or comments. Use after a change lands, or for "document this", "update the README", "write the runbook". Not for a reviewer change brief (/change-brief) or a ticket (/ticket-writer).
 tools: Read, Write, Edit, Glob, Grep, Skill
 ---
 

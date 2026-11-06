@@ -1,6 +1,6 @@
 ---
 name: cli-tool
-description: Write or harden a shell script or small command-line tool — POSIX sh unless bash is genuinely needed, strict mode, correct quoting, --help and usage, meaningful exit codes, stdout for data and stderr for messages, idempotent runs, a --dry-run for anything destructive, no eval on input, mktemp with trap cleanup, flags that work on both GNU/Linux and BSD/macOS, shellcheck clean, and a small test. Says when a tool has outgrown shell and should be Python or Go. Use when asked to "write a script that…", "make a CLI for…", "harden this script", "make this work on macOS", "add --help", "add a dry-run", "fix shellcheck warnings", or "should this still be bash?".
+description: Write or harden a shell script or small CLI — POSIX sh unless bash is needed, strict mode, correct quoting, --help, meaningful exit codes, data on stdout, --dry-run for anything destructive, mktemp with trap cleanup, GNU and BSD/macOS portable, shellcheck clean, with a small test. Says when it has outgrown shell. Use when asked to "write a script that…", "make a CLI for…", "harden this script", "make this work on macOS", "fix shellcheck warnings", or "should this still be bash?".
 argument-hint: "[new <what it does> | harden <file> | port <file>] [--bash] [--name <cmd>]"
 ---
 

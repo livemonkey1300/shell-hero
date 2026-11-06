@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Stop a long piece of work cleanly before the context fills up, and leave a handoff note that a fresh session (yours, a teammate's or another agent's) can continue from cold — state, what is done and verified, the exact next step, open questions, the files and commands that matter, and what not to redo. Writes it where the work lives (the issue or PR as a comment, or HANDOFF.md in the repo) and keeps it short enough to survive being summarised. Use when asked to "hand off", "write a handoff", "wrap up for now", "I'm out of context", "save state before compacting", "continue this in a new session", when a session has run long (many turns, big tool outputs, auto-compaction has fired), or at the end of every agent run that will be resumed.
+description: Stop long work cleanly before context fills and leave a handoff note a fresh session or agent can continue from cold — state, what is done and verified, the exact next step, open questions, key files and commands, what not to redo — written where the work lives (issue/PR comment or HANDOFF.md). Use when asked to "hand off", "write a handoff", "wrap up for now", "I'm out of context", "save state before compacting", when a session has run long, or at the end of an agent run that will be resumed.
 argument-hint: "[where: issue <id> | pr <id> | file <path>] [--resume <path or id>]"
 ---
 

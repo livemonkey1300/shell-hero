@@ -1,6 +1,6 @@
 ---
 name: game-start
-description: Take a video game idea to a playable core loop — a one-page design (the verb, the loop, the fail state, the one feeling it is for), an originality check, a small tech stack (plain canvas + ES modules by default, fixed-timestep loop, seeded randomness so play is testable), then the smallest version that is fun to play for thirty seconds, with tests that drive it headless. Use when asked to "make a game", "start a game about…", "prototype this game idea", "game jam", "turn this into a playable game", or "I want a game where…". Not for art (game-art) or release (game-ship).
+description: Take a video game idea to a playable core loop — a one-page design (verb, loop, fail state, the feeling it is for), an originality check, a small stack (canvas + ES modules, fixed-timestep loop, seeded randomness), then the smallest version fun for thirty seconds, with headless tests. Use when asked to "make a game", "start a game about…", "prototype this game idea", "game jam", or "I want a game where…". Not for art (game-art) or release (game-ship).
 argument-hint: "<the idea, one sentence> [--engine canvas|phaser|godot] [--jam <hours>]"
 ---
 

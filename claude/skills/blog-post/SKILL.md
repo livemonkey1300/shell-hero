@@ -1,6 +1,6 @@
 ---
 name: blog-post
-description: Research and write one blog post or case study for a small company — pick one reader and one question, do keyword research from what the user gives or from public search results, outline, draft in MDX or Markdown, run a brand-voice review, cite every factual claim with its URL and the date it was checked, and use customer names, quotes and logos only with written permission. Writes the file and a short publishing checklist (title tag, meta description, slug, alt text, internal links); never publishes. Use when asked to "write a blog post about…", "draft a case study", "write an article for our site", "SEO post on…", "turn this into a blog post", or "what should we blog about".
+description: Research and write one blog post or case study for a small company — one reader and one question, keyword research, outline, MDX or Markdown draft, brand-voice review, every factual claim cited with its URL and date checked, customer names and logos only with written permission. Writes the file and a publishing checklist; never publishes. Use when asked to "write a blog post about…", "draft a case study", "SEO post on…", "turn this into a blog post", or "what should we blog about".
 argument-hint: "<topic or question> [--case-study <customer>] [--format mdx|md] [--out <path>]"
 ---
 

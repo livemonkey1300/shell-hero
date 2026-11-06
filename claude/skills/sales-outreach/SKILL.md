@@ -1,6 +1,6 @@
 ---
 name: sales-outreach
-description: Outbound sales for a small Canadian business — define the ideal customer profile, build a prospect list only from consented or legitimately business-published sources, draft outreach sequences, keep an objection log and a clean CRM — with a CASL gate that refuses to draft any commercial email, text or DM until a consent basis is recorded for that recipient, and puts sender identification and a working unsubscribe in every message. Refuses address harvesting, scraping that breaches a platform's terms, and buying lists. Never sends anything. Use when asked to "find prospects", "build a lead list", "write a cold email", "draft an outreach sequence", "follow up with leads", "define our ICP", "log objections", or "clean up the CRM".
+description: Outbound sales for a small Canadian business — ICP, prospect lists from consented or business-published sources only, outreach sequences, objection log, clean CRM. A CASL gate drafts no commercial message without a recorded consent basis, and every one carries sender ID and a working unsubscribe. Refuses harvesting, scraping and bought lists; never sends. Use when asked to "find prospects", "build a lead list", "write a cold email", "draft an outreach sequence", or "define our ICP".
 argument-hint: "[icp | prospects | sequence | objections | crm] [details]"
 ---
 

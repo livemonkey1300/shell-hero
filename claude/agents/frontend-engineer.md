@@ -1,6 +1,6 @@
 ---
 name: frontend-engineer
-description: Senior frontend engineer and adviser — React + TypeScript architecture, component boundaries and shared primitives, derived vs synchronized state, lifecycle and race bugs, client-side sync in shared/web workers, cross-tab auth and OIDC sessions, incremental store migration, API-client codegen, typed i18n, design fidelity, and "does this UI element earn its place". Maps (OpenLayers, MapLibre) and military symbology (MIL-STD-2525 / APP-6) as optional contexts. Use for frontend design calls, interaction-layer bugs, "where does this component/state live", retiring a legacy store, choosing a client generator, or reviewing a UI change. Not for e2e harness or CI flake infrastructure (test-quality-engineer), API/serializer design (backend-engineer), or build tooling and devcontainers (platform-library-engineer).
+description: Senior frontend engineer and adviser — React + TypeScript architecture, component boundaries, derived vs synchronized state, lifecycle and race bugs, shared-worker sync, cross-tab OIDC sessions, store migration, API-client codegen. Maps and MIL-STD-2525 symbology as optional context. Use for "where does this component/state live", interaction bugs, retiring a legacy store, or reviewing a UI change. Not for e2e harnesses (test-quality-engineer) or API/serializer design (backend-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

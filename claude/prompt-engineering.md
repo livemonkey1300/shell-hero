@@ -27,6 +27,7 @@ The short checklist form is `skills/edit-prompt/references/checklist.md`. Copy-p
 - [Part 7: Writing for the human who reads the output](#part-7-writing-for-the-human-who-reads-the-output)
 - [Part 8: Anatomy of a complete prompt](#part-8-anatomy-of-a-complete-prompt)
 - [Part 9: When a prompt misbehaves](#part-9-when-a-prompt-misbehaves)
+- [Part 10: Token efficiency for agents that touch code](#part-10-token-efficiency-for-agents-that-touch-code) (§41–50)
 
 ---
 
@@ -1020,7 +1021,130 @@ Find the symptom, then go to the section.
 | Ends with a menu of options | No convergence | §36 |
 | Posted something the user hadn't seen | No show-then-confirm | §32 |
 | CLAUDE.md is long and the model still misses the key rule | Always-on bloat | §25, §26 |
+| Agents burn usage limits fast | Always-loaded bloat, uncapped output, flailing, wrong model | Part 10 |
+| A fix loop goes round and round | No attempt budget | §46 |
 
 When changing a prompt, use `/edit-prompt` (`skills/edit-prompt/`). It applies this guide as a
 checklist and makes you show the before and after, run the consumers' tests, and try a real example
 plus a regression case.
+
+---
+
+## Part 10: Token efficiency for agents that touch code
+
+Every token an agent spends lands in the same usage limit: yours, or a whole agent company's on one
+subscription. Most of it is not spent on the change. It goes on always-loaded text, file dumps, tool
+output nobody reads, repeated reads and fix loops. These sections are the reasons behind the rules
+file `templates/rules/agentic-work.md`; `claude/bin/kit-lint` enforces the ones a script can check.
+
+**Measure first.** `claude/bin/kit-lint --report` prints what the kit loads into every session. In
+an agent company, the per-run cost is: tool and skill descriptions + the global `CLAUDE.md` + the
+role's instructions + whatever the run reads. Measure before you trim, and trim the biggest line.
+
+### §41. Always-loaded text has a budget
+
+**Why.** A skill or agent `description`, `CLAUDE.md` and unscoped rules load into every session
+before any work starts; in an agent company, into every run of every agent. Bodies load only when
+used. So the budget is tight where the text is always present and loose where it is on demand.
+
+**Good.** Descriptions ≤ 500 characters (the trigger, three to five quoted phrases, one "Not for"
+clause), `CLAUDE.md` ≤ ~150 lines, detail moved into the skill body or a `references/` file.
+
+**Prevents.** Seventy skills at 650 characters each: about 10,000 tokens paid on every run before
+the agent reads a line of the task.
+
+### §42. Search, then read the lines that matter
+
+**Why.** Reading a whole file to find one function costs the whole file, and it stays in the context
+for the rest of the session. A search returns the location; a ranged read returns the function.
+
+**Good.** `rg -n "def charge_escapes" src/` → read 30 lines around the hit. **Bad.** `cat
+src/update.js` (480 lines) to check one condition.
+
+**Prevents.** Context filled with code that was never needed, and the auto-compaction that follows.
+
+### §43. Cap tool output at the source
+
+**Why.** A full test log, a 3,000-line diff or `kubectl describe` on every pod lands in the context
+whole. The model reads the first failure; the rest is paid for and ignored.
+
+**Good.** `node --test --test-reporter=dot`, `pytest -q -x`, `git diff --stat` then one path,
+`kubectl get events --sort-by=.lastTimestamp | tail -20`, `| head -50` on anything unbounded.
+
+**Prevents.** One command eating a fifth of the context.
+
+### §44. Narrowest check first, full suite once
+
+**Why.** The full suite after every edit multiplies its output by the number of edits. The test that
+covers the change answers the question; the full suite answers "did I break anything else" once.
+
+**Prevents.** Five full test runs on one change.
+
+### §45. Don't re-read, don't re-verify
+
+**Why.** A file already in the context is already paid for. A check already run on the same commit
+gives the same answer. Developers and reviewers re-running each other's checks double the cost of
+verification without adding evidence, unless the reviewer is the independent check (§35), and then
+it runs them once.
+
+**Prevents.** The same 400-line file read four times in one session.
+
+### §46. An attempt budget for fix loops
+
+**Why.** An agent that fails a test tends to try small variations of the same idea. Each try costs
+a full edit-and-test cycle, and the context fills with failed attempts that bias the next one.
+
+**Good.** Two attempts per failure, each with its hypothesis written down first. Then stop and report
+what was learned, as a handoff or a blocked issue. Orchestrators cap rounds the same way.
+
+**Prevents.** Twenty runs of the same failing test, and a session that ends with nothing to show.
+
+### §47. Subagents earn their cost
+
+**Why.** A subagent starts with nothing but its brief, and re-reads what the parent already knew.
+It pays off for independent work or a wide search whose conclusion is all the parent needs. It
+doesn't pay off for a lookup the parent could do in two tool calls.
+
+**Good brief.** Goal; files in scope; what's ruled out; hand-back ≤ 300 words, verdict first,
+`file:line`, verified vs inferred, no file dumps (§34).
+
+**Prevents.** Five agents each reading the same twenty files, and the parent receiving 20,000 words it
+has to read too.
+
+### §48. Route by model and effort
+
+**Why.** The strongest model at the highest effort on a rename is the most expensive way to do a
+cheap thing. Usage limits are drawn faster by larger models and longer reasoning.
+
+**Good.**
+
+| Work | Model / effort |
+|---|---|
+| Search, triage, routing, mechanical edits, docs sync | small or mid model, low effort |
+| Implementation of a planned change | mid model, medium effort |
+| Architecture, security rulings, final review | strongest model, medium–high effort |
+
+In Paperclip: the `model` and `effort` fields per agent. In Claude Code: the `model:` field in an agent
+file, or the effort of a dispatched subagent.
+
+**Prevents.** A routing agent on the top model thinking hard about which teammate gets an issue.
+
+### §49. Hand off instead of pushing through
+
+**Why.** Past a point, a long session is worse *and* dearer: early details are compacted, the work
+repeats, and every turn re-sends a huge context. A fresh session with a forty-line note is cheaper
+and sharper. See the `handoff` and `memory-sleep` skills, and session rotation in agent companies.
+
+**Prevents.** Hour-long sessions that re-derive what they decided at minute five.
+
+### §50. Keep the prefix stable
+
+**Why.** Prompt caching reuses the unchanged start of a prompt. Editing `CLAUDE.md`, rules or skills
+in the middle of a session, or putting dates and ticket text into always-loaded files, changes the
+prefix and makes the next turns pay in full.
+
+**Good.** Volatile facts go in the message or the issue; always-loaded files change between
+sessions, through a commit.
+
+**Prevents.** A cache miss on every turn because a timestamp sits at the top of `CLAUDE.md`.
+

@@ -1,6 +1,6 @@
 ---
 name: devops-ci-engineer
-description: Build, CI and delivery adviser — pipeline stage design and job gating, runner sizing and transient-only retries, task-runner entry points, docker-bake image graphs and build-cache strategy, reproducible and immutable (bootc) image builds, POSIX shell scripting, dev/CI/prod parity, ephemeral CI infrastructure, Terraform/Ansible deployment, the local dev loop (Tilt, devcontainers), and how a change or incident gets written up. Use for "how is this built and shipped", "why is CI slow/flaky/expensive", "review this pipeline/script/Containerfile", or "why does it work locally but not in CI". Not for chart architecture (kubernetes-helm-engineer), dependency-bot policy (supply-chain-engineer), or alerting design (sre-observability-engineer).
+description: Build, CI and delivery adviser — pipeline stages and job gating, runner sizing and transient-only retries, docker-bake graphs and build cache, reproducible (bootc) images, POSIX shell, dev/CI/prod parity, Terraform/Ansible deploys, the local dev loop. Use for "how is this built and shipped", "why is CI slow/flaky", reviewing a pipeline or script, or "works locally, not in CI". Not for chart architecture (kubernetes-helm-engineer) or dependency-bot policy (supply-chain-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

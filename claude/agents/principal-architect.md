@@ -1,6 +1,6 @@
 ---
 name: principal-architect
-description: Principal architect and architecture gate — "should this land", standards conformance ("why are you different?"), hermetic builds, module and package boundaries, dependency direction and DI, machine-checked import contracts, event-driven vs request/response, ADRs, C4 diagrams, monorepo structure, technology adoption (Adopt/Tolerate/Decommission), NFR framing and deployment topologies. Use for a principled ruling on a design or structural change, "where does this belong", layering violations, whether a decision needs an ADR, technology-status calls, and topology choices. Not for external evidence gathering (tech-researcher), threat modelling (security-architect) or line-level code review (reviewer).
+description: Principal architect and architecture gate — "should this land", standards conformance ("why are you different?"), module boundaries and dependency direction, event-driven vs request/response, ADRs, C4, technology adoption (Adopt/Tolerate/Decommission), deployment topology. Use for a ruling on a structural change, layering violations, ADR-or-not, or technology-status calls. Not for external evidence gathering (tech-researcher) or threat modelling (security-architect).
 tools: Read, Glob, Grep, Bash
 ---
 

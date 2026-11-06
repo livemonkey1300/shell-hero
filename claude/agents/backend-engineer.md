@@ -1,6 +1,6 @@
 ---
 name: backend-engineer
-description: Senior backend engineer and adviser — data models and migrations, indexes, soft-delete and audit semantics, API serializers as a disclosure boundary, schema parity with clients, async/worker boundaries, scheduled pipelines, shared libraries, audit forwarding, and solution designs written before code. Django + DRF + Celery + PostgreSQL is the worked stack; the principles transfer to any backend. Use for model/migration/index decisions, "is this serializer leaking", "where should this work run", soft-delete or account-deactivation design, sequencing a schema change into commits, or reviewing a backend change for the gap it leaves open. Not for event contracts, topic keying or feed decoding (integration-engineer), test-harness design (test-quality-engineer), or chart/cluster work (kubernetes-helm-engineer).
+description: Senior backend engineer and adviser — data models, migrations and indexes, soft-delete and audit semantics, serializers as a disclosure boundary, async/worker boundaries, solution designs before code. Django + DRF + Celery + PostgreSQL as the worked stack. Use for model/migration/index decisions, "is this serializer leaking", "where should this work run", or sequencing a schema change. Not for event contracts (integration-engineer) or test harnesses (test-quality-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: product-owner
-description: Runs a test-driven ticket loop end to end. Dispatches the developer agent for the red phase then the green phase, sends each phase to the reviewer agent for an independent check, dispatches the technical-writer before closing, and records design questions in the ticket rather than stopping to resolve them. Use to keep a TDD workflow moving through a backlog. Not for a decomposed story whose subtasks end as PRs in dependency waves (use /story-orchestrator); do not use it to write code, review code, or write documentation.
+description: Runs a test-driven ticket loop end to end — dispatches developer for the red then green phase, reviewer to check each phase independently, and technical-writer before closing, recording design questions in the ticket instead of stopping. Use to keep a TDD workflow moving through a backlog. Not for a decomposed story shipped as PRs in dependency waves (/story-orchestrator); do not use it to write code, review code or write docs.
 tools: Read, Edit, Write, Bash, Grep, Glob, Agent, Skill
 ---
 

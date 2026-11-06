@@ -1,6 +1,6 @@
 ---
 name: spec-miner
-description: Reverse-engineer a specification from existing code — what the system does today (entry points, inputs and outputs, data model, states and transitions, error paths, side effects, configuration), with every claim cited as file:line and labelled verified (ran it), read in code, or inferred — then a separate section on what it probably should do (gaps, dead code, undocumented behaviour, contradictions with the docs). Writes SPEC.md or a path given. Use when asked to "write a spec from the code", "document what this does", "reverse-engineer this service", "what does this module actually do", "mine a spec", "we have no docs for this", or before a rewrite or migration.
+description: Reverse-engineer a specification from existing code — entry points, inputs and outputs, data model, states, error paths, side effects, config — every claim cited as file:line and labelled verified, read in code or inferred, plus a separate section on gaps, dead code and contradictions with the docs. Writes SPEC.md. Use when asked to "write a spec from the code", "document what this does", "reverse-engineer this service", "we have no docs for this", or before a rewrite.
 argument-hint: "[<path or module>] [--out <file>] [--depth quick|full]"
 ---
 

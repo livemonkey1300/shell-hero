@@ -1,6 +1,6 @@
 ---
 name: change-brief
-description: Turn a code change — the current branch, a pull or merge request (GitHub or GitLab), or a commit range — into a change brief teammates can read without the diff open — what changed and why, risk and rollback, how to test, and the code a reviewer must read. Written as a Markdown file, stopping on secrets first, and published (PR comment, gist, snippet, docs tool) only where and when the user says. Use when the user says "write a change brief", "share this change", "explain this PR to the team", "summarise this branch for the reviewer", or /change-brief. Not for reviewing the change (use /pr-review).
+description: Turn a code change (current branch, GitHub PR or GitLab MR, or commit range) into a brief teammates can read without the diff — what changed and why, risk and rollback, how to test, the code a reviewer must read. Writes Markdown, stops on secrets, publishes only where and when the user says. Use when the user says "write a change brief", "share this change", "explain this PR to the team", "summarise this branch for the reviewer", or /change-brief. Not for reviewing (use /pr-review).
 argument-hint: "[#N | !N | PR/MR URL | a..b | path] [--audience eng|pm|mixed] [--pr-body] [--out <file>]"
 ---
 

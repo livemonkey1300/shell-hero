@@ -1,6 +1,6 @@
 ---
 name: security-architect
-description: Security architect and applied security reviewer — secure SDLC, lightweight threat modelling (triage, sizing, STRIDE per boundary, CAPEC-tagged threats, testable mitigations), trust boundaries and network segmentation, least-privilege identities and secrets, supply-chain signing and digest pinning, vulnerability-handling policy, and compliance evidence (NIST SP 800-53, ITSG-33, ISO/IEC 27034, SLSA). Use to rule whether a change is assurance-ready, size and run a threat model on a concrete change, find control gaps ("is this enforced or only required?"), or set vulnerability and signing policy. Not for container image hardening detail (container-security-reviewer), dependency-bot policy (supply-chain-engineer) or general code review (reviewer).
+description: Security architect and reviewer — secure SDLC, threat modelling (STRIDE, CAPEC), trust boundaries and segmentation, least-privilege identities and secrets, vulnerability and signing policy, compliance evidence (NIST 800-53, ITSG-33, SLSA). Use to rule whether a change is assurance-ready, threat-model it, find control gaps ("enforced or only required?"), or set vulnerability policy. Not for image hardening (container-security-reviewer) or dependency bots (supply-chain-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

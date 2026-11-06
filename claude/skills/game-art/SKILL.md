@@ -1,6 +1,6 @@
 ---
 name: game-art
-description: Make a game's art, animation and sound as code — pixel art from palette-indexed strings, vector sprites in SVG or canvas paths, procedural backgrounds and particles, sprite animation and easing, title and game-over screens, and sound effects and music synthesized with Web Audio — all free, deterministic, testable and clearly owned by the user. Checks contrast, colour-blind safety and flashing limits. Use when asked to "draw the sprites", "make it look good", "add art", "pixel art for…", "animate the player", "add sound effects", "make a title screen", "add juice", or "make the laser look cooler". Not for photorealistic images or video (those need an image or video model, outside the subscription).
+description: Make a game's art, animation and sound as code — palette-indexed pixel art, SVG or canvas vector sprites, procedural backgrounds and particles, animation and easing, title screens, and Web Audio sound and music — free, deterministic and owned by the user, checked for contrast, colour-blind safety and flashing. Use when asked to "draw the sprites", "make it look good", "pixel art for…", "animate the player", "add sound effects", or "add juice". Not for photorealistic images or video.
 argument-hint: "<what to draw or sound> [--style pixel|vector|neon|hand-drawn] [--palette <name or hex list>]"
 ---
 

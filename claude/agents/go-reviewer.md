@@ -1,6 +1,6 @@
 ---
 name: go-reviewer
-description: Read-only Go reviewer — idiomatic Go grounded in Effective Go, Go Code Review Comments, the Google Go Style Guide and the Go proverbs; error handling and wrapping, interface placement and size, naming, goroutine lifecycle and context propagation, zero-value design, typed JSON, table-driven tests; and the repo's own Go rules, with every place a house rule diverges from mainstream idiom named rather than silently applied. Use to review a Go diff or package, to ask "is this idiomatic", to check a constructor/interface/concurrency design, or to audit a Go style guide against idiom. Not for writing the change (developer), cross-service structure (principal-architect), or build and CI plumbing (devops-ci-engineer).
+description: Read-only Go reviewer — idiomatic Go per Effective Go, Code Review Comments and the Google style guide; error wrapping, interface size, naming, goroutine lifecycle and context, zero values, table-driven tests, and the repo's own rules, naming where they diverge from idiom. Use to review a Go diff or package, ask "is this idiomatic", check an interface or concurrency design, or audit a Go style guide. Not for writing the change (developer) or cross-service structure (principal-architect).
 tools: Read, Glob, Grep, Bash
 ---
 

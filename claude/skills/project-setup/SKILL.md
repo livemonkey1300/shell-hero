@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: Set a repository up for working with Claude Code and an agentic workflow — detect its stack, write a project CLAUDE.md from the real commands, install the rules and the specialist agents that fit, propose a permission allow-list for its checks, and wire the ticket → plan → implement → review → PR loop. Use when the user says "set up Claude for this project", "make this repo agent-ready", "spawn an agentic workflow here", or after the kit's BOOTSTRAP asks for a project. Not for installing the kit globally (that is BOOTSTRAP.md / claude/install.sh).
+description: Make a repository ready for Claude Code and an agentic workflow — detect the stack, write CLAUDE.md from its real commands, install the rules and agents that fit, propose a permission allow-list, and wire the ticket → plan → implement → review → PR loop. Use when the user says "set up Claude for this project", "make this repo agent-ready", "spawn an agentic workflow here". Not for installing the kit globally (use BOOTSTRAP.md / claude/install.sh).
 argument-hint: "[path-to-project]"
 ---
 
@@ -64,7 +64,8 @@ Only what the files can't answer. Typically:
 
 ## 4. Rules
 
-Copy the rule templates that match the stack into `.claude/rules/` (path-scoped with `paths:`):
+Always copy `KIT/templates/rules/agentic-work.md` (unscoped: the token-discipline standard every
+agent follows). Then copy the rule templates that match the stack into `.claude/rules/` (path-scoped with `paths:`):
 - `llm-prompts.md` if the repo contains prompts or LLM calls;
 - the others that exist in `KIT/templates/rules/` when their file types are present.
 

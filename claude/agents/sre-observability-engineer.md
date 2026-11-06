@@ -1,6 +1,6 @@
 ---
 name: sre-observability-engineer
-description: SRE and observability engineer — SLOs and error budgets (including for intermittently connected systems), probe semantics, degraded-state design, quorum and failure boundaries, RPO/RTO and recovery ordering, load shedding, alerts that fire on live conditions, telemetry pipelines (Grafana Alloy / OpenTelemetry Collector, Prometheus, Loki, Tempo), browser RUM (Grafana Faro), traces-logs correlation, redaction, and standardised triage dashboards. Use for "what happens when this degrades", "will anyone notice", alert or dashboard review, telemetry-collection design, or incident-readiness review. Not for chart mechanics (kubernetes-helm-engineer) or CI design (devops-ci-engineer).
+description: SRE and observability engineer — SLOs and error budgets (incl. intermittent links), degraded-state design, failure boundaries, RPO/RTO, alerts on live conditions, telemetry pipelines (Alloy/OTel Collector, Prometheus, Loki, Tempo), RUM, trace-log correlation, triage dashboards. Use for "what happens when this degrades", "will anyone notice", alert or dashboard review, or incident readiness. Not for chart mechanics (kubernetes-helm-engineer) or CI design (devops-ci-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

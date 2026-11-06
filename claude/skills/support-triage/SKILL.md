@@ -1,6 +1,6 @@
 ---
 name: support-triage
-description: Make customer support manageable for a small team — redact personal information from an exported ticket CSV first, then mine it for themes (counts, trend, cost, the fix that removes the most tickets), write macros and canned replies in the brand voice, and set escalation rules and severity levels, including what counts as a privacy incident under PIPEDA or Quebec's Law 25. Analyses exports only; never replies to customers or changes the help desk. Use when asked to "analyse our support tickets", "what are customers complaining about", "find ticket themes", "write a macro / canned reply", "set up escalation rules", or "triage this ticket export".
+description: Tame customer support for a small team — redact personal information from a ticket CSV export first, mine it for themes (counts, trend, the fix that removes most tickets), write brand-voice macros, and set escalation and severity rules, including PIPEDA / Law 25 privacy incidents. Exports only; never replies to customers or changes the help desk. Use when asked to "analyse our support tickets", "what are customers complaining about", "write a canned reply", or "set up escalation rules".
 argument-hint: "[themes <csv> | macros | escalation | ticket <text>] [details]"
 ---
 

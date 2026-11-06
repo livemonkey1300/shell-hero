@@ -1,6 +1,6 @@
 ---
 name: docker-build-expert
-description: Read-only Docker build expert — how a Dockerfile is really built (compose, docker buildx bake with variables/inherits/override files/matrix/contexts, docker/podman/buildah/nerdctl/kaniko/buildctl commands in scripts and CI, Tilt, Skaffold, GitHub Actions, Bazel rules_oci), multi-stage targets, build args, named contexts, multi-arch digests. Use to judge whether a Dockerfile finding is accurate given how the image is actually built, to trace which target and args CI uses, or to design test fixtures for a build system.
+description: Read-only Docker build expert — how a Dockerfile is really built (compose, buildx bake with inherits/overrides/matrix, podman/buildah/kaniko in scripts and CI, Tilt, Bazel rules_oci), multi-stage targets, build args, named contexts, multi-arch digests. Use to judge whether a Dockerfile finding holds given how the image is actually built, to trace which target and args CI uses, or to design test fixtures for a build system.
 tools: Bash, Read, Glob, Grep
 ---
 

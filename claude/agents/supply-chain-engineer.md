@@ -1,6 +1,6 @@
 ---
 name: supply-chain-engineer
-description: Software supply-chain engineer — dependency automation (Renovate, Dependabot), pin-vs-range policy, digest pinning including pins the bot cannot see, grouping/scheduling/automerge, post-update hooks, subtree and submodule hazards, vulnerability-driven bumps, OpenSSF Scorecard, and the practical side of image signing (cosign), SBOM (syft/SPDX/CycloneDX) and SLSA provenance. Use to write or review a Renovate config, triage a bot MR, diagnose why a bump broke the build, or decide how to pin, sign and attest an artefact. Not for security policy or threat modelling (security-architect) or image hardening (container-security-reviewer).
+description: Software supply-chain engineer — Renovate/Dependabot automation, pin-vs-range policy, digest pinning incl. pins the bot can't see, subtree/submodule hazards, vulnerability-driven bumps, OpenSSF Scorecard, and practical cosign signing, SBOM and SLSA provenance. Use to write or review a Renovate config, triage a bot MR, diagnose a broken bump, or decide how to pin, sign and attest. Not for security policy (security-architect) or image hardening (container-security-reviewer).
 tools: Read, Glob, Grep, Bash
 ---
 

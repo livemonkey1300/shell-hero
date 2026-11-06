@@ -1,6 +1,6 @@
 ---
 name: store-review
-description: Turn order, sales and returns CSV exports (Shopify, Stripe, Square, Etsy, itch.io, WooCommerce or any generic export) into a one-page business review — first dropping or redacting personal information, then computing everything with a script (revenue, orders, average order value, units, repeat-customer rate on a hashed customer id, cohort retention, refunds and returns by reason, contribution margin if costs are given, sales tax collected, top and bottom products), explaining changes with a KPI tree, and ending with three actions ranked by impact and effort. Analyses exports only; never touches the store. Use when asked to "review our sales", "analyse this Shopify / Stripe / Etsy export", "how did the store do this month", "why did revenue drop", "what's our repeat rate / AOV", or "which products should we cut".
+description: Turn order, sales and returns CSV exports (Shopify, Stripe, Square, Etsy, itch.io, WooCommerce, generic) into a one-page business review — redacts personal information first, computes revenue, AOV, repeat rate, cohorts, refunds, margin and tax with a script, explains changes with a KPI tree, ends with three ranked actions. Exports only; never touches the store. Use when asked to "review our sales", "analyse this Shopify export", "why did revenue drop", or "which products should we cut".
 argument-hint: "<export.csv> [more.csv…] [--period YYYY-MM | --from YYYY-MM-DD --to YYYY-MM-DD] [--costs <costs.csv>]"
 ---
 

@@ -123,12 +123,13 @@ The **reviewer** can pull in up to two of these for domain checks, and **expert-
 
 - [`evals/`](evals/README.md): **behavioural tests for skills**. Each is a prompt plus the observable behaviour it must produce, including a "nothing to do" case. `pr-review`, `implement-subtask` and `open-pr` ship with suites.
 - [`lsp/`](lsp/README.md): a repo-local plugin marketplace that gives Claude real language servers (Python, TypeScript). Its README covers the silent `lspServers` trap.
-- `templates/rules/`: `code-exploration.md` (which search tool first), `shell-scripts.md` (POSIX by default), `llm-prompts.md`.
+- `templates/rules/`: **`agentic-work.md` (the token-discipline standard for every agent that touches code; reasons in `prompt-engineering.md` Part 10)**, `code-exploration.md` (which search tool first), `shell-scripts.md` (POSIX by default), `llm-prompts.md`.
 
 ### bin
 
 - `pomo`: the Pomodoro timer engine (state, notifications, log) that the `pomo*` skills drive. A
   25-minute timer cannot live inside a Claude turn, so it runs as a real background job.
+- `kit-lint`: enforces the kit's budgets by script: descriptions ≤ 500 chars (they load into every session), body caps, required sections. `--report` prints the per-session token estimate.
 - `statusline.sh`: status line showing model · repo · @branch · dirty count · parked count.
 
 ## Install

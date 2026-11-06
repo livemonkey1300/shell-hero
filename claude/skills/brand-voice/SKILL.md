@@ -1,6 +1,6 @@
 ---
 name: brand-voice
-description: Define and apply a small company's voice — voice and tone by situation, three to five messaging pillars, a one-page style sheet — and review any copy (site, email, deck, post, support macro) against it, catching "AI slop" patterns line by line and proposing rewrites. Covers English/French for Quebec (French-first obligations, writing French rather than translating, Canadian French conventions). Use when asked to "define our brand voice", "write a style guide", "what are our messaging pillars", "review this copy", "does this sound like us", "make this less AI-sounding", "de-slop this", or "do we need a French version".
+description: Define and apply a small company's voice — tone by situation, messaging pillars, a one-page style sheet — and review any copy against it, catching "AI slop" line by line and proposing rewrites. Covers English/French for Quebec (French-first obligations, writing French rather than translating). Use when asked to "define our brand voice", "write a style guide", "review this copy", "does this sound like us", "de-slop this", or "do we need a French version".
 argument-hint: "[define | pillars | style-sheet | review <file or text> | bilingual] [details]"
 ---
 

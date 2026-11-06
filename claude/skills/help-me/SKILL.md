@@ -1,6 +1,6 @@
 ---
 name: help-me
-description: Look up/troubleshoot a Linux or project command using your cheatsheet library (default ~/docs), then optionally save what you learned back into ~/docs
+description: Look up or troubleshoot a Linux or project command using your cheatsheet library (default ~/docs), then optionally save what you learned back into ~/docs. Use when asked "how do I…", "what's the command for…", "why is this command failing", "help me with <tool>", or /help-me.
 argument-hint: <what you're trying to do, or the command you're stuck on>
 ---
 

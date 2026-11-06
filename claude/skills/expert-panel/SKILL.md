@@ -1,6 +1,6 @@
 ---
 name: expert-panel
-description: Convene a panel of specialist role agents (security, architecture, Kubernetes, CI, SRE, supply chain, cloud, integration, backend, frontend, research…) on a design, ops or architecture question, run them in parallel, then synthesize ONE answer that keeps their disagreements intact, makes one recommendation and flags one-way doors. Advisory and read-only; nothing is edited. Use when asked to "get the experts on this", "convene a panel", "what would security and SRE say about…", "review this design from every angle", or /expert-panel. Not for a single-domain question (ask that specialist directly) or a quick cross-domain first pass (use the generalist-oracle agent).
+description: Convene a panel of specialist role agents (security, architecture, Kubernetes, SRE, cloud…) on a design or ops question in parallel, then synthesize ONE answer that keeps disagreements intact, makes one recommendation and flags one-way doors. Advisory, read-only. Use when asked to "get the experts on this", "convene a panel", "what would security and SRE say about…", or /expert-panel. Not for a single-domain question or a quick first pass (use generalist-oracle).
 argument-hint: "<question, decision or design to review> [--only a,b,c] [--max N] [--research] [--doc path.md] | --help"
 ---
 

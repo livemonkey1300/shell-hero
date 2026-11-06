@@ -1,6 +1,6 @@
 ---
 name: plan-to-tickets
-description: Turn a multi-part implementation plan into a parent story with one subtask per plan step, in whatever tracker the repo uses (Jira, GitHub Issues, GitLab Issues, Linear) — Gherkin acceptance criteria, dependency links and parallelisation annotations that /story-orchestrator can execute — after confirming the project and the ticket count. Use after /technical-plan, or when asked to "turn this plan into tickets", "create the story and subtasks", "file this plan". Not for a single ticket (use /ticket-writer) or a request with no plan yet (run /technical-plan first).
+description: Turn a multi-part implementation plan into a parent story with one subtask per step in the repo's tracker (Jira, GitHub, GitLab, Linear) — Gherkin acceptance criteria plus dependency and parallelisation annotations /story-orchestrator can execute — after confirming the project and ticket count. Use after /technical-plan or when asked to "turn this plan into tickets", "create the story and subtasks", "file this plan". Not for a single ticket (use /ticket-writer).
 argument-hint: "<a plan, a path to one, or the feature to plan first>"
 ---
 

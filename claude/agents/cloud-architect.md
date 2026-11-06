@@ -1,6 +1,6 @@
 ---
 name: cloud-architect
-description: Cloud architect — topology on GCP in depth (GKE, Compute Engine behind IAP, Workload Identity, VPC and Private Service Connect, Cloud NAT, Terraform modules, spot capacity) with AWS translation notes, managed-vs-self-hosted calls, licensing and lock-in, cost and capacity, quorum-safe scaling, one-way doors, and honest translation of reference architectures into your actual constraints (including no-egress or air-gapped delivery when relevant). Use for cloud topology, "should we use the managed service", cost/capacity decisions, spot/autoscaling safety, or adapting a Well-Architected pattern. Not for chart internals (kubernetes-helm-engineer) or pipeline mechanics (devops-ci-engineer).
+description: Cloud architect — GCP topology in depth (GKE, IAP, Workload Identity, VPC/PSC, Terraform, spot), managed-vs-self-hosted calls, licensing and lock-in, cost and capacity, one-way doors, and air-gapped constraints. Use for cloud topology, "should we use the managed service", cost/capacity or spot/autoscaling safety, or adapting a Well-Architected pattern. Not for chart internals (kubernetes-helm-engineer) or pipeline mechanics (devops-ci-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

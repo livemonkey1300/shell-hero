@@ -1,6 +1,6 @@
 ---
 name: cloud-cost
-description: Find waste in a cloud bill, read-only — from a billing export (AWS Cost and Usage Report, GCP billing export, Azure cost export, as CSV or JSON) or read-only CLI queries the user approves, computed by a script rather than by eye. Covers top services, projects and tags, month-over-month change, idle and unattached resources (disks, IPs, load balancers, snapshots), oversized instances, storage class and lifecycle, egress, untagged spend, and commitment or savings-plan coverage. Returns a ranked list with the monthly saving and its formula, effort, risk and whether each is a one-way door, with the currency stated. Never deletes, resizes or buys anything. Use when asked to "cut our cloud bill", "why did AWS/GCP/Azure cost go up", "find cloud waste", "analyse this billing export", "what's costing us the most", "idle resources", or "should we buy a savings plan".
+description: Find waste in a cloud bill, read-only — from an AWS/GCP/Azure billing export or approved read-only CLI queries, computed by script. Covers top spend, month-over-month change, idle resources, oversizing, egress and savings plans; returns a ranked list with monthly saving, formula, risk and one-way doors. Never deletes, resizes or buys anything. Use when asked to "cut our cloud bill", "why did AWS cost go up", "find cloud waste", "analyse this billing export", or "should we buy a savings plan".
 argument-hint: "<path to billing export (csv|json)> | --cli aws|gcp|azure [--months 3] [--currency CAD|USD]"
 ---
 

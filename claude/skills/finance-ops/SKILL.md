@@ -1,6 +1,6 @@
 ---
 name: finance-ops
-description: Bookkeeping and money admin for a small Canadian business — a CRA-friendly chart of accounts, categorizing transactions from a bank or card export, the monthly close checklist, cash runway, drafting an invoice with the right GST/HST/QST lines and registration numbers for <PROVINCE>, sales-tax filing reminders, and receipt-keeping rules — in a spreadsheet where one helps. Drafts and calculates only; never moves money, never files with the CRA or Revenu Québec, and flags every "ask your accountant" item. Use when asked to "set up my books", "categorize these transactions", "do the month-end close", "how much runway do I have", "draft an invoice", "what tax do I charge", "when is my GST/HST due", or "what receipts do I need to keep".
+description: Bookkeeping and money admin for a small Canadian business — chart of accounts, categorizing bank or card exports, month-end close, cash runway, invoices with the right GST/HST/QST lines, filing reminders and receipt rules. Drafts and calculates only; never moves money or files with the CRA or Revenu Québec, and flags every "ask your accountant" item. Use when asked to "set up my books", "do the month-end close", "how much runway do I have", "draft an invoice", or "what tax do I charge".
 argument-hint: "[accounts | categorize <file> | close <YYYY-MM> | runway | invoice | tax-calendar | receipts] [details]"
 ---
 

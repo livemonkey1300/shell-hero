@@ -1,6 +1,6 @@
 ---
 name: what-now
-description: You don't know what to work on — this asks a few sharp questions and converges on one thing, sized to the state you're actually in
+description: You don't know what to work on — asks a few sharp questions and converges on one thing, sized to the state you're actually in. Use when asked "what should I work on", "what now", "I can't decide what to do next", or /what-now.
 argument-hint: (optional) anything on your mind, or blank
 ---
 

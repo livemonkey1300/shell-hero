@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""kit-lint: enforce the kit's token budgets and prompt structure, by code.
+
+    claude/bin/kit-lint            check every skill and agent; exit 1 on any error
+    claude/bin/kit-lint --report   also print the per-session token estimate
+
+Why budgets: every skill's and agent's `description` is loaded into EVERY
+session (and every agent run in tools like Paperclip) before any work starts.
+Bodies load only when used, so they get a looser cap. Numbers are estimates
+(chars / 4), good enough to stop drift. See claude/prompt-engineering.md Part 10.
+"""
+import glob
+import os
+import re
+import sys
+
+import yaml
+
+KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DESC_MAX = 500          # chars; ~125 tokens, paid every session
+SKILL_BODY_MAX = 330    # lines; loaded when the skill runs
+AGENT_BODY_MAX = 300    # lines; loaded when the agent is spawned or read
+# Each pair: (what the section is for, headings that count). Missing → warning.
+SKILL_SECTIONS = (
+    ("a reply contract", r"Reply contract|Reply shape|Output|Report"),
+    ("boundaries", r"Boundaries|Hard constraints|Never"),
+)
+TRIGGER = re.compile(r"\b(Use when|Use for|Use to|Use after|Use in)\b")
+
+
+def load(path):
+    text = open(path, encoding="utf-8").read()
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        return None, text, "no frontmatter"
+    try:
+        return yaml.safe_load(parts[1]) or {}, parts[2], None
+    except yaml.YAMLError as e:
+        return None, parts[2], f"frontmatter is not YAML: {e}"
+
+
+def main():
+    report = "--report" in sys.argv
+    errors, warnings, desc_chars = [], [], 0
+    items = [("skill", p, os.path.basename(os.path.dirname(p))) for p in sorted(glob.glob(f"{KIT}/skills/*/SKILL.md"))]
+    items += [("agent", p, os.path.basename(p)[:-3]) for p in sorted(glob.glob(f"{KIT}/agents/*.md"))]
+    for kind, path, name in items:
+        rel = os.path.relpath(path, os.path.dirname(KIT))
+        fm, body, err = load(path)
+        if err:
+            errors.append(f"{rel}: {err}")
+            continue
+        if fm.get("name") != name:
+            errors.append(f"{rel}: name '{fm.get('name')}' does not match '{name}'")
+        desc = str(fm.get("description", ""))
+        desc_chars += len(desc)
+        if len(desc) > DESC_MAX:
+            errors.append(f"{rel}: description {len(desc)} chars > {DESC_MAX}")
+        if len(desc) > 120 and not TRIGGER.search(desc):
+            warnings.append(f"{rel}: description has no 'Use when…' trigger")
+        lines = body.count("\n")
+        cap = SKILL_BODY_MAX if kind == "skill" else AGENT_BODY_MAX
+        if lines > cap:
+            warnings.append(f"{rel}: body {lines} lines > {cap} (split detail into a references/ file)")
+        if kind == "skill":
+            for what, pattern in SKILL_SECTIONS:
+                if not re.search(rf"^#+ .*({pattern})", body, re.M | re.I):
+                    warnings.append(f"{rel}: no section for {what}")
+    for w in warnings:
+        print(f"warn  {w}")
+    for e in errors:
+        print(f"FAIL  {e}")
+    if report or not errors:
+        print(f"{len(items)} items; descriptions ≈ {desc_chars // 4} tokens loaded every session "
+              f"(budget {DESC_MAX} chars each)")
+    if errors:
+        print(f"{len(errors)} error(s)")
+        return 1
+    print("ok: kit-lint clean")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

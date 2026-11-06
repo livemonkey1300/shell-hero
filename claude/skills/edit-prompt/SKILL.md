@@ -1,6 +1,6 @@
 ---
 name: edit-prompt
-description: Write, change or tune a prompt and measure it — a Claude Code skill (SKILL.md), a subagent (agents/*.md), a CLAUDE.md or .claude/rules file, a prompt template, or a system prompt built in code — using a fixed set of prompt-engineering conventions (untrusted data tagged and kept apart from the task, the reply contract last, decisions made by code not the model, named failure modes, ids as one-way doors, descriptions that trigger). Use when asked to "write a skill", "make an agent", "tune / fix this prompt", "Claude keeps doing X", "change what Claude writes for Y", or to review prompt engineering.
+description: Write, change or tune a prompt and measure it — a Claude Code skill (SKILL.md), subagent, CLAUDE.md or rules file, prompt template, or system prompt built in code — using fixed prompt-engineering conventions (untrusted data kept apart, reply contract last, decisions made by code, named failure modes, descriptions that trigger). Use when asked to "write a skill", "make an agent", "tune / fix this prompt", "Claude keeps doing X", or to review prompt engineering.
 argument-hint: "<which prompt, and what should change>"
 ---
 

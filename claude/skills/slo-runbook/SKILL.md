@@ -1,6 +1,6 @@
 ---
 name: slo-runbook
-description: Write the reliability documents a service needs, grounded in the repo's real dashboards, alerts and configs — `slo` picks SLIs from what users feel (availability, latency, freshness, correctness) and writes targets, windows, error-budget maths and multi-window burn-rate alert pairs with the arithmetic shown; `runbook` writes a one-page runbook for an alert or service (meaning, impact, first five minutes, diagnosis with exact commands, mitigation, escalation, rollback) with every command marked verified or unverified; `postmortem` writes a blameless incident review with timeline, impact, contributing factors and owned, dated action items. Use when asked to "define SLOs", "what should our SLO be", "set up burn-rate alerts", "error budget", "write a runbook for <alert>", "on-call runbook", "write the postmortem", or "incident review".
+description: Write a service's reliability docs from the repo's real dashboards, alerts and configs — `slo` (SLIs users feel, targets, error budget, multi-window burn-rate alerts with the maths shown), `runbook` (one page per alert, every command marked verified or unverified), `postmortem` (blameless, with owned, dated actions). Use when asked to "define SLOs", "set up burn-rate alerts", "write a runbook for <alert>", "write the postmortem", or "incident review".
 argument-hint: "slo <service> | runbook <alert or service> | postmortem [incident notes or file]"
 ---
 

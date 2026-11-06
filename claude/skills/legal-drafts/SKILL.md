@@ -1,6 +1,6 @@
 ---
 name: legal-drafts
-description: First drafts and review checklists of the everyday legal documents a small Canadian business needs — a privacy policy aligned to PIPEDA and Quebec's Law 25, website terms of use, a contractor agreement checklist, a CASL compliance policy, and an NDA review checklist — each flagging where provinces differ (Quebec most), each marked as a draft for review by a lawyer licensed in the right province. Never gives legal advice, never says a document is compliant, never signs or sends. Use when asked to "write a privacy policy", "draft website terms", "what should a contractor agreement cover", "do we need a CASL policy", "review this NDA", "check this contract", or "what does Law 25 require on our site".
+description: First drafts and review checklists of everyday legal documents for a small Canadian business — privacy policy (PIPEDA, Quebec's Law 25), website terms, contractor agreement checklist, CASL policy, NDA review — flagging where provinces differ, each marked for review by a licensed lawyer. Never gives legal advice, never says a document is compliant, never signs or sends. Use for "write a privacy policy", "draft website terms", "review this NDA", or "what does Law 25 require on our site".
 argument-hint: "[privacy-policy | terms | contractor | casl-policy | nda-review <file>] [details]"
 ---
 

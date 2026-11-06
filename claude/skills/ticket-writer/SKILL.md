@@ -1,6 +1,6 @@
 ---
 name: ticket-writer
-description: Draft a ticket or a ticket comment in whatever tracker the repo uses (Jira, GitHub Issues, GitLab Issues, Linear) — a ticket with Context, Problem and checkable Acceptance criteria under an imperative, component-first summary; a comment a teammate can catch up from in thirty seconds — grounded in evidence from the code, shown exactly, and created only after the user says so. Use when asked to "write / file / raise a ticket", "open an issue for this", "add a subtask", "comment on ABC-123 that…", "update the ticket", or when /start-work needs a ticket. Not for turning a whole plan into a story with subtasks (use /plan-to-tickets).
+description: Draft a ticket or ticket comment in the repo's tracker (Jira, GitHub, GitLab, Linear) — Context, Problem and checkable acceptance criteria under an imperative, component-first summary, or a thirty-second catch-up comment — grounded in the code, shown exactly, created only after the user says so. Use when asked to "write / file a ticket", "open an issue for this", "add a subtask", "comment on ABC-123 that…". Not for turning a whole plan into a story with subtasks (use /plan-to-tickets).
 argument-hint: "[ticket | comment <KEY>] [what it is about]"
 ---
 

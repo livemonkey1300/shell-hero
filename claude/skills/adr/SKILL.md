@@ -1,6 +1,6 @@
 ---
 name: adr
-description: Write and maintain Architecture Decision Records — triage whether a choice needs one at all (one-way doors, cross-team contracts and new technology do; reversible local choices don't), draft a numbered record in the folder the repo already uses (docs/adr/NNNN-title.md by default), supersede or deprecate an old record with links both ways, and list or rebuild the index. Shows every draft before writing and never rewrites an accepted record. Use when asked to "write an ADR", "record this decision", "do we need an ADR for…", "supersede ADR 12", "deprecate this decision", "list our ADRs", or "update the ADR index".
+description: Write and maintain Architecture Decision Records — triage whether a choice needs one (one-way doors, cross-team contracts and new technology do; reversible local choices don't), draft a numbered record in the repo's ADR folder, supersede or deprecate with links both ways, and rebuild the index. Shows every draft first; never rewrites an accepted record. Use when asked to "write an ADR", "record this decision", "do we need an ADR for…", "supersede ADR 12", or "list our ADRs".
 argument-hint: "[new <title> | triage <decision> | supersede <number> | deprecate <number> | list] [details]"
 ---
 

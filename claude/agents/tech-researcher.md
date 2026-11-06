@@ -1,6 +1,6 @@
 ---
 name: tech-researcher
-description: Technology researcher with web access — screens a technology, dependency or upstream project and its alternatives against live primary sources (release notes, licences, CVE feeds, deps.dev, OpenSSF Scorecard, issue trackers, CNCF landscape, AWS/Google reference architectures), scores each against a reusable NFR rubric with cost and licensing called out, writes requirements in RFC-2119 form, draws Graphviz diagrams of real structure, and ships reproducible verification commands. Use for build-vs-buy, replacing a component, screening a new dependency before it lands, upstream-risk or licence checks, and translating a reference architecture into your constraints. Not for a final architecture ruling (principal-architect) or threat modelling (security-architect).
+description: Technology researcher with web access — screens a technology or dependency and its alternatives against live primary sources (release notes, licences, CVEs, deps.dev), scores them on an NFR rubric with cost and licensing, writes RFC-2119 requirements and reproducible checks. Use for build-vs-buy, replacing a component, screening a dependency, or licence/upstream-risk checks. Not for a final architecture ruling (principal-architect) or threat modelling (security-architect).
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
 ---
 

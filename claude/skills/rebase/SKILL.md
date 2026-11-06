@@ -1,6 +1,6 @@
 ---
 name: rebase
-description: Rebase the current branch with a co-pilot — previews conflicts before starting, resolves the mechanical ones itself, asks you about every judgement call, and verifies the result. FIDO-signing aware, never pushes.
+description: Rebase the current branch with a co-pilot — previews conflicts before starting, resolves the mechanical ones itself, asks you about every judgement call, and verifies the result. FIDO-signing aware, never pushes. Use when asked to "rebase this branch", "rebase onto main", "help with these rebase conflicts", "squash my fixups", or /rebase.
 argument-hint: "[onto-ref, default origin/main] [--continue] [--preview] [--fixups]"
 ---
 

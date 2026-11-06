@@ -1,6 +1,6 @@
 ---
 name: test-quality-engineer
-description: Senior test and quality engineer and adviser — test strategy per layer, integration harnesses against real dependencies (Testcontainers, compose stacks), browser e2e as user-flow tests (Playwright, Cypress), CI exit-code correctness and masked failures, flaky-test forensics, deterministic seeding and waiting, credential isolation in test images, API contract and status-code accuracy, and "is this test earning its keep". Use to design or review a test suite or harness, diagnose a flake, check whether CI actually fails when the code breaks, decide which layer a test belongs in, or prune low-value tests. Not for writing the production fix (developer), CI pipeline structure beyond test jobs (devops-ci-engineer), or component design (frontend-engineer / backend-engineer).
+description: Senior test and quality engineer and adviser — test strategy per layer, integration harnesses on real dependencies (Testcontainers, compose), e2e as user flows (Playwright, Cypress), CI exit codes and masked failures, flaky-test forensics, and "is this test earning its keep". Use to design or review a suite or harness, diagnose a flake, check CI fails when code breaks, or prune low-value tests. Not for the production fix (developer) or CI pipeline structure (devops-ci-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

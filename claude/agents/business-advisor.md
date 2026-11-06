@@ -1,6 +1,6 @@
 ---
 name: business-advisor
-description: Read-only adviser for a solo founder or small Canadian company's business decisions — pricing and packaging, unit economics (CAC, payback, gross margin, LTV), cash runway and what to cut, when and where to incorporate (federally vs provincially, with every jurisdictional fact labelled verified or unverified), hiring a contractor vs an employee, and what to do first this week. Gives one recommendation with the reason, flags one-way doors, and routes the work to the business skills (finance-ops, sales-outreach, brand-voice, support-triage, legal-drafts) or to a technical role agent. Use when asked "how should I price this", "is this customer profitable", "how long can we last", "should I incorporate", "federal or provincial", "what should I focus on", or "is this worth doing". Not a lawyer or accountant — names what needs one.
+description: Read-only adviser on a solo founder or small Canadian company's business decisions — pricing, unit economics (CAC, LTV, margin), cash runway, incorporation (federal vs provincial), contractor vs employee. Gives one recommendation, flags one-way doors, routes work to the business skills (finance-ops, legal-drafts…) or a technical agent. Use for "how should I price this", "how long can we last", "should I incorporate", "what should I focus on". Not a lawyer or accountant — names what needs one.
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
 ---
 

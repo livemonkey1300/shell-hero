@@ -1,6 +1,6 @@
 ---
 name: launch-kit
-description: Prepare a product or game launch as a folder of drafts — a positioning line, three tagline options, short and long descriptions, the first comment or maker post, a launch-day checklist and hour-by-hour timeline, an email to people who opted in, social posts and a short press note — for Product Hunt, itch.io, Hacker News "Show HN", Reddit, a newsletter and social. Drafts only; never posts, submits or sends. Emails go through the sales-outreach CASL gate, claims need proof from the brand-voice pillars, and it refuses fake reviews, vote-trading, sockpuppets and undisclosed paid endorsements. Use when asked to "plan our launch", "launch on Product Hunt", "write a Show HN post", "post this on Reddit / itch.io", "write the launch email", "launch-day checklist", or "write a press release for the launch".
+description: Prepare a product or game launch as a folder of drafts — positioning, taglines, descriptions, maker post, launch-day checklist and timeline, opt-in email, social posts and press note — for Product Hunt, itch.io, Show HN and Reddit. Drafts only; never posts or sends. Emails pass the sales-outreach CASL gate; refuses fake reviews, vote-trading and sockpuppets. Use for "plan our launch", "launch on Product Hunt", "write a Show HN post", "write the launch email", or "launch-day checklist".
 argument-hint: "<product or game, one line> [--date YYYY-MM-DD] [--channels ph,itch,hn,reddit,newsletter,social,press]"
 ---
 

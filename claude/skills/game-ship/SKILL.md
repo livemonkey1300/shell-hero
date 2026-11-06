@@ -1,6 +1,6 @@
 ---
 name: game-ship
-description: Get a small game ready to release and put it out — a release checklist (it runs from a clean clone, works offline, no console errors, controls shown on screen, mute and pause, saves survive a reload), a web build for itch.io or GitHub Pages, a store page (short pitch, screenshots and a GIF made from the game itself, tags, controls, credits and licences), and the Canadian business questions to settle before charging money (sales tax on digital sales, French for Quebec players, privacy if anything is collected). Use when asked to "ship the game", "publish to itch.io", "make a store page", "is my game ready to release", "release checklist", or "can I sell this game". Not legal or tax advice — names what needs a professional.
+description: Get a small game ready to release — a release checklist (clean clone, offline, no console errors, controls on screen, mute and pause, saves survive reload), a web build for itch.io or GitHub Pages, a store page with screenshots and a GIF from the game, and the Canadian questions before charging (sales tax, French for Quebec, privacy). Use when asked to "ship the game", "publish to itch.io", "make a store page", "is my game ready to release", or "can I sell this game". Not legal or tax advice.
 argument-hint: "[check | build | page | business] [target: itch|pages|steam]"
 ---
 

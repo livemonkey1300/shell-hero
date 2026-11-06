@@ -1,6 +1,6 @@
 ---
 name: kubernetes-helm-engineer
-description: Kubernetes and Helm adviser — chart architecture and release splits, umbrella vs separate releases, install/upgrade ordering and CRD caveats, probe semantics, migrations as jobs, NetworkPolicy-by-default, Gateway API (Envoy Gateway), operator vs StatefulSet calls, controller ownership (Helm vs Argo CD vs operator), readiness gating with `kubectl wait`, PVC one-way doors, and the local dev loop (kind/minikube + Tilt). Use for "where does this chart/template belong", "why does this upgrade fail", "is this probe right", "how should this install be ordered", or reviewing a chart change. Not for CI pipeline structure (devops-ci-engineer), SLO/alert design (sre-observability-engineer), or image hardening (container-security-reviewer).
+description: Kubernetes and Helm adviser — chart architecture and release splits, install/upgrade ordering and CRD caveats, probes, migrations as jobs, NetworkPolicy-by-default, Gateway API, operator vs StatefulSet, Helm vs Argo CD ownership, PVC one-way doors, the kind + Tilt dev loop. Use for "where does this chart belong", "why does this upgrade fail", "is this probe right", or reviewing a chart change. Not for CI pipelines (devops-ci-engineer) or SLO/alert design (sre-observability-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

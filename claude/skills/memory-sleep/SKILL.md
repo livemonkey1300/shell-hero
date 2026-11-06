@@ -1,6 +1,6 @@
 ---
 name: memory-sleep
-description: Keep a long-lived memory file small and useful — read it at the start of work, append only durable lessons at the end, and when it grows past its cap, "sleep" on it — fold old entries into a short summary, merge duplicates, drop what turned out wrong or no longer true, and keep every fact's source and date. Works for a person's notes, a project's MEMORY.md, Claude Code's memory folder, or an agent's per-role memory file. Use when asked to "remember this", "what do you remember about…", "clean up memory", "consolidate notes", "memory is too long", "sleep on it", at the start or end of an agent run that keeps memory, or when a memory file is over its line cap.
+description: Keep a long-lived memory file small and useful — read it at the start, append only durable lessons at the end, and past its cap "sleep" on it (summarise old entries, merge duplicates, drop what is wrong, keep each fact's source and date). Works on notes, MEMORY.md or agent memory files. Use when asked to "remember this", "clean up memory", "consolidate notes", "memory is too long", "sleep on it", at the start or end of an agent run that keeps memory, or when a memory file is over its cap.
 argument-hint: "[read | add <fact> | sleep] [path to the memory file] [--cap <lines>]"
 ---
 

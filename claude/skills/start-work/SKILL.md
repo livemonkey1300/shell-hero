@@ -1,6 +1,6 @@
 ---
 name: start-work
-description: Start a piece of work from a rough request or a ticket key — read the ticket (with its parent and siblings when there is a tracker), ask the few questions that decide the work (at most four, in one round), make the branch, state the plan in a few lines with any one-way doors flagged, then hand over to the matching skill (/add-feature, /edit-prompt, /implement-subtask, /pr-feedback, /technical-plan, a bug fix test-first). Use when someone says "start work on ABC-123", "I want…", "can we…", "pick up this ticket", or asks for a change without a precise spec.
+description: Start a piece of work from a rough request or a ticket key — read the ticket and its parent and siblings, ask at most four deciding questions in one round, make the branch, state a short plan with one-way doors flagged, then hand over to the matching skill (/add-feature, /implement-subtask, /technical-plan, a test-first bug fix…). Use when someone says "start work on ABC-123", "pick up this ticket", "I want…", "can we…", or asks for a change without a precise spec.
 argument-hint: "[what you want, or a ticket key]"
 ---
 

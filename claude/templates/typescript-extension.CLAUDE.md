@@ -114,4 +114,5 @@ Branch pipelines build `<next>-dev.<n>` and never release.
 - **Base branch:** `<main>`. Branches: `<type>/<ticket>-<short-title>`.
 - **Tracker:** <GitHub Issues | GitLab Issues | Jira PROJ | Linear | none>.
 - **Checks that must pass before "done":** `<lint cmd>`, `<test cmd>`.
+- **Token discipline:** `.claude/rules/agentic-work.md` (search before reading, capped output, two attempts per failure, handoff when long).
 - **Never without asking:** push, deploy, migrate a shared database, change CI, touch secrets.

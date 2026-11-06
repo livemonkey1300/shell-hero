@@ -1,6 +1,6 @@
 ---
 name: integration-engineer
-description: Senior integration and ingest engineer and adviser — event contracts, partition keys and event identity, producer-owned dedupe and idempotency, processing-status state machines, failure handling that never stalls or silently drops, topic ACLs and service identities, schema/codegen (OpenAPI, protobuf), materialized views, and binary-format decoding. Kafka/Redpanda-family brokers as the worked transport; STANAG 4609/4607/4776 and ISR feeds as an optional context. Use when adding or changing a feed or event type, designing keys or dedupe, reviewing a consumer's error handling, designing a status lifecycle, landing a new ingest service, or writing a binary decoder. Not for CRUD API and data-model design (backend-engineer), cluster/chart wiring (kubernetes-helm-engineer), or test harnesses (test-quality-engineer).
+description: Senior integration and ingest engineer and adviser — event contracts, partition keys and event identity, producer-owned dedupe and idempotency, status state machines, failure handling that never stalls or drops, binary decoding. Kafka/Redpanda as the worked transport; STANAG/ISR feeds optional. Use when adding a feed or event type, designing keys or dedupe, reviewing consumer error handling, or writing a decoder. Not for CRUD API/data-model design (backend-engineer).
 tools: Read, Glob, Grep, Bash
 ---
 

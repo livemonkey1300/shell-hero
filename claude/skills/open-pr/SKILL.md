@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: Open a pull request (GitHub, gh) or merge request (GitLab, glab) for the work already committed on the current branch — committed scope only, stops when nothing is ahead of the base, refuses to open a duplicate, links the tracker ticket (or drafts one from the diff and creates it only after approval), writes a description grouped by feature, and opens it as a draft by default after showing the title and body. Use when the user says "open a PR", "raise an MR", "create a merge request", "put this up for review", "ship this for review", even without mentioning a ticket. Not for a description only (use /change-brief), reviewing a PR (/pr-review), or taking a ticket from nothing to PR (/implement-subtask).
+description: Open a GitHub PR (gh) or GitLab MR (glab) for work already committed on the current branch — stops if nothing is ahead, refuses duplicates, links the tracker ticket (or drafts one, created only after approval), and opens as a draft after showing title and body. Use when the user says "open a PR", "raise an MR", "create a merge request", or "put this up for review", even without a ticket. Not for a description only (/change-brief), reviewing (/pr-review), or ticket-to-PR (/implement-subtask).
 argument-hint: "[TICKET-KEY | --no-ticket] [--base <branch>] [--ready] [--audience eng|pm|mixed]"
 ---
 

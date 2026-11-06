@@ -14,8 +14,9 @@ copy files by hand. The scripts do the copying and never overwrite without a bac
 
 - **No secrets, employer names or internal URLs, ever.** This repo is public. Before any commit:
   `rg -i 'token|secret|password|ATATT|glpat-' zsh/ bin/ claude/`
-- **New skill or agent →** add it to a pack in `claude/install.sh` (`pack_items`), then run
-  `claude/install.sh --check`.
+- **New or changed skill or agent →** add it to a pack in `claude/install.sh` (`pack_items`), then
+  run `claude/install.sh --check && claude/bin/kit-lint`. Descriptions ≤ 500 characters: they load
+  into every session (`prompt-engineering.md` Part 10).
 - **New shell alias or function →** give it a description comment (that's what feeds F1 and the
   cheatsheet), then run `docs/gen-cheatsheet.sh`.
 - **Test shell changes in a throwaway home:**
