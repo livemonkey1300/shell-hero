@@ -10,6 +10,7 @@ them next to itself, in `skills/<name>/evals/evals.json`.
 | `open-pr` | `skills/open-pr/evals/evals.json` |
 | `pr-review` | `skills/pr-review/evals/evals.json` |
 | `implement-subtask` | `skills/implement-subtask/evals/evals.json` |
+| `game-start` | `skills/game-start/evals/evals.json` |
 
 ## The format
 

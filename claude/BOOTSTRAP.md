@@ -38,6 +38,7 @@ Ask these four together:
    - **Claude kit, `roles`**: 18 specialist advisers;
    - **Claude kit, `writing`**: grammar and message shaping;
    - **Claude kit, `business`**: run a small company in Canada: finance with GST/HST/QST, CASL-safe sales, brand voice, support, legal drafts. Ask for their `<PROVINCE>` in the same round, and point them at `claude/business/README.md`;
+   - **Claude kit, `games`**: make original video games: idea → playable loop, art and sound as code, release checklist, a playtest reviewer;
    - **zsh shell setup**: `./install.sh`. This changes `~/.zshrc` (with a backup) and the login shell. Off unless they say yes.
 2. **Working-style CLAUDE.md?**
    - *Install mine as global*: only if they have none;

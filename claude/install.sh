@@ -27,10 +27,11 @@ pack_items() {
     workflow)    echo "skill:ticket-writer skill:plan-to-tickets skill:implement-subtask skill:story-orchestrator skill:open-pr skill:expert-panel agent:developer agent:reviewer agent:technical-writer agent:product-owner" ;;
     roles)       echo "agent:principal-architect agent:security-architect agent:tech-researcher agent:generalist-oracle agent:kubernetes-helm-engineer agent:devops-ci-engineer agent:supply-chain-engineer agent:cloud-architect agent:sre-observability-engineer agent:container-security-reviewer agent:backend-engineer agent:frontend-engineer agent:integration-engineer agent:test-quality-engineer agent:llm-feature-engineer agent:platform-library-engineer agent:docker-build-expert agent:vscode-extension-ux-reviewer agent:go-reviewer" ;;
     business)    echo "skill:finance-ops skill:sales-outreach skill:brand-voice skill:support-triage skill:legal-drafts agent:business-advisor" ;;
+    games)       echo "skill:game-start skill:game-art skill:game-ship agent:game-designer" ;;
     *) return 1 ;;
   esac
 }
-PACKS="focus writing engineering workflow roles business"
+PACKS="focus writing engineering workflow roles business games"
 pack_blurb() {
   case $1 in
     focus)       echo "working memory: park, reload, decide, pomodoro, status line" ;;
@@ -38,6 +39,7 @@ pack_blurb() {
     engineering) echo "start work, add a feature, plan, rebase, commit, review, change brief, set up a project" ;;
     workflow)    echo "the agentic loop: ticket → plan → implement → review → PR, panel of experts" ;;
     business)    echo "run a small company in Canada: finance and GST/HST/QST, CASL-safe sales, brand voice, support, legal drafts" ;;
+    games)       echo "make original video games: idea → playable loop, art and sound as code, release checklist, playtest reviewer" ;;
     roles)       echo "19 read-only specialist advisers (architecture, security, k8s, CI, backend, frontend…)" ;;
   esac
 }

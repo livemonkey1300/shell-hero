@@ -65,6 +65,10 @@ claude/
 | `brand-voice` | voice, pillars, style sheet, AI-slop review, bilingual EN/FR for Quebec | |
 | `support-triage` | redact personal info, then themes by cost, canned replies, escalation and privacy-incident path | |
 | `legal-drafts` | privacy policy (PIPEDA / Law 25), terms, contractor and NDA checklists, CASL policy; **drafts for a lawyer, never advice** | |
+| **Games** | | |
+| `game-start` | Idea → one-page design → playable grey-box loop with deterministic tests; originality gate (no remakes of existing games) | |
+| `game-art` | Art, animation and sound **as code**: palette pixel art, vector sprites, particles, Web Audio effects; flashing/colour-blind/motion checks | |
+| `game-ship` | Release checklist, itch.io / Pages build, store page from real screenshots, Canadian sales-tax / French / privacy questions | |
 
 ### Agents
 
@@ -78,6 +82,7 @@ claude/
 | `vscode-extension-ux-reviewer` | UX review of a VS Code extension's flow in terms of the VS Code API | read-only |
 | `go-reviewer` | Go idiom review grounded in Effective Go and the style guides; names where a house rule departs from idiom | read-only |
 | `business-advisor` | Founder decisions: pricing, unit economics, runway, incorporation; routes to the business skills | read-only + web |
+| `game-designer` | Playtest review: is the loop fun, game feel, difficulty, friction, what to cut; the one change most likely to make it more fun | read-only, runs tests |
 
 **Specialist role agents.** These are advisers, all read-only. Each grounds itself in your repo first (README, CLAUDE.md, ADRs, `git log`, the actual files). It answers verdict-first with `file:line` evidence, labels every claim verified / read in code / inferred / couldn't determine, gives one recommendation, and flags one-way doors. Specialist knowledge such as air-gapped delivery, defence and regulated standards, or geospatial work sits in optional sections; nothing is assumed.
 
@@ -144,7 +149,7 @@ mkdir -p ~/.claude/agents && cp claude/agents/reviewer.md ~/.claude/agents/
 [`BOOTSTRAP.md`](BOOTSTRAP.md): one round of questions, a dry run, then the install, plus
 [`/project-setup`](skills/project-setup/SKILL.md) for a project of yours.
 
-**By hand, with the installer.** Packs are `focus`, `writing`, `engineering`, `workflow`, `roles` and `business`:
+**By hand, with the installer.** Packs are `focus`, `writing`, `engineering`, `workflow`, `roles`, `business` and `games`:
 ```sh
 claude/install.sh --list                          # what's in each pack, and what you already have
 claude/install.sh --all --dry-run                 # show, change nothing
